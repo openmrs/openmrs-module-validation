@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module configVersion="1.2">
+	
+    <!-- Module Properties -->
+	<id>validation</id>
+	<name>Validation Module</name>
+	<version>1.0</version>
+	<package>org.openmrs.module.validation</package>
+	<author>Rafal Korytkowski</author>
+	<description>
+			A module which allows to validate data and metadata in your system.
+	</description>
+	
+	<!-- / Module Properties -->
+	
+	<require_version>1.6</require_version>
+
+	<!-- Required Privileges -->
+	<privilege>
+		<name>Validate Objects</name>
+		<description>Allows to validate data and metadata</description>
+	</privilege>
+	<!-- /Required Privileges -->
+
+    <!-- Module Activator -->
+	<activator>org.openmrs.module.validation.ValidationActivator</activator>
+	
+	<!-- Add's link to admin page --> 
+	<extension>
+		<point>org.openmrs.admin.list</point>
+		<class>org.openmrs.module.validation.extension.html.AdminList</class>
+	</extension> 
+
+	
+	<!-- Internationalization -->
+	<!-- All message codes should start with @MODULE_ID@.* -->
+	<messages>
+		<lang>en</lang>
+		<file>messages.properties</file>
+	</messages>
+	<!-- /Internationalization -->
+	
+</module>
+
