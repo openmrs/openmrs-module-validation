@@ -29,7 +29,7 @@ public interface ValidationService {
 	
 	@Authorized("Validate Objects")
 	@Transactional(readOnly = true)
-	void validate(String type, int firstObject, int maxObjects, Map<Object, Exception> errors);
+	void validate(String type, long firstObject, long maxObjects, Map<Object, Exception> errors);
 	
 	@Authorized("Validate Objects")
 	@Transactional(readOnly = true)

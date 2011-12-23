@@ -31,15 +31,15 @@ public class ValidationThread extends Thread {
 	
 	private final String type;
 	
-	private final int totalObjects;
+	private final long totalObjects;
 	
-	private final int startFrom;
+	private final long startFrom;
 	
 	private final Map<Object, Exception> errors;
 	
-	private volatile int objectsLeftToProcess;
+	private volatile long objectsLeftToProcess;
 	
-	public ValidationThread(String type, int startFrom, int totalObjects, UserContext userContext) {
+	public ValidationThread(String type, long startFrom, long totalObjects, UserContext userContext) {
 		this.userContext = userContext;
 		this.type = type;
 		this.totalObjects = totalObjects;
@@ -51,21 +51,21 @@ public class ValidationThread extends Thread {
 	/**
 	 * @return the totalObjects
 	 */
-	public int getTotalObjects() {
+	public long getTotalObjects() {
 		return totalObjects;
 	}
 	
 	/**
 	 * @return the objectsLeftToProcess
 	 */
-	public int getObjectsLeftToProcess() {
+	public long getObjectsLeftToProcess() {
 		return objectsLeftToProcess;
 	}
 	
 	/**
 	 * @return the startFrom
 	 */
-	public int getStartFrom() {
+	public long getStartFrom() {
 		return startFrom;
 	}
 	
@@ -89,7 +89,7 @@ public class ValidationThread extends Thread {
 	public void run() {
 		Context.setUserContext(userContext);
 		
-		int currentPosition = startFrom;
+		long currentPosition = startFrom;
 		while (objectsLeftToProcess > 0 && !isInterrupted()) {
 			Context.getService(ValidationService.class).validate(type, currentPosition, BATCH_SIZE, errors);
 			

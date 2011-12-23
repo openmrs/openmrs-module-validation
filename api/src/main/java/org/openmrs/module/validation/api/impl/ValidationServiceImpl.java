@@ -46,7 +46,7 @@ public class ValidationServiceImpl implements ValidationService {
 	 * @see org.openmrs.module.validation.api.ValidationService#startNewValidationThread(java.lang.Class)
 	 */
 	public void startNewValidationThread(String type) {
-		Integer totalObjects = (Integer) sessionFactory.getCurrentSession().createCriteria(type).addOrder(Order.asc("uuid"))
+		Long totalObjects = (Long) sessionFactory.getCurrentSession().createCriteria(type).addOrder(Order.asc("uuid"))
 		        .setProjection(Projections.rowCount()).uniqueResult();
 		
 		ValidationThread validationThread = new ValidationThread(type, 0, totalObjects, Context.getUserContext());
@@ -59,10 +59,10 @@ public class ValidationServiceImpl implements ValidationService {
 	 * @see org.openmrs.module.validation.api.ValidationService#validate(java.lang.Class, long,
 	 *      long, java.util.Map)
 	 */
-	public void validate(String type, int firstObject, int maxObjects, Map<Object, Exception> errors) {
+	public void validate(String type, long firstObject, long maxObjects, Map<Object, Exception> errors) {
 		@SuppressWarnings("unchecked")
 		List<Object> list = sessionFactory.getCurrentSession().createCriteria(type).addOrder(Order.asc("uuid"))
-		        .setFirstResult(firstObject).setMaxResults(maxObjects).list();
+		        .setFirstResult((int) firstObject).setMaxResults((int) maxObjects).list();
 		
 		for (Object object : list) {
 			try {
