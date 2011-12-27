@@ -49,10 +49,18 @@ public class ValidationServiceImpl implements ValidationService {
 		Long totalObjects = (Long) sessionFactory.getCurrentSession().createCriteria(type).addOrder(Order.asc("uuid"))
 		        .setProjection(Projections.rowCount()).uniqueResult();
 		
-		ValidationThread validationThread = new ValidationThread(type, 0, totalObjects, Context.getUserContext());
-		validationThread.start();
+		Long partition = 0L;
+		if (totalObjects > 0) {
+			partition = totalObjects / 10;
+		}
 		
-		validationThreads.add(validationThread);
+		for (int i = 0; i < totalObjects; i += partition + 1) {
+			ValidationThread validationThread = new ValidationThread(type, i, partition, Context.getUserContext());
+			validationThread.start();
+			
+			validationThreads.add(validationThread);
+        }
+		
 	}
 	
 	/**
