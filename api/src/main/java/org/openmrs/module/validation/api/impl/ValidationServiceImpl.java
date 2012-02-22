@@ -46,8 +46,10 @@ public class ValidationServiceImpl implements ValidationService {
 	 * @see org.openmrs.module.validation.api.ValidationService#startNewValidationThread(java.lang.Class)
 	 */
 	public void startNewValidationThread(String type) {
-		Long totalObjects = (Long) sessionFactory.getCurrentSession().createCriteria(type).addOrder(Order.asc("uuid"))
+		Object result = sessionFactory.getCurrentSession().createCriteria(type).addOrder(Order.asc("uuid"))
 		        .setProjection(Projections.rowCount()).uniqueResult();
+		
+		Long totalObjects = ((Number) result).longValue();
 		
 		Long partition = 0L;
 		if (totalObjects > 0) {
@@ -59,7 +61,7 @@ public class ValidationServiceImpl implements ValidationService {
 			validationThread.start();
 			
 			validationThreads.add(validationThread);
-        }
+		}
 		
 	}
 	
@@ -88,14 +90,14 @@ public class ValidationServiceImpl implements ValidationService {
 	public List<ValidationThread> getValidationThreads() {
 		return new ArrayList<ValidationThread>(validationThreads);
 	}
-
+	
 	/**
-     * @see org.openmrs.module.validation.api.ValidationService#removeValidationThread(int)
-     */
-    public void removeValidationThread(int index) {
-	    ValidationThread validationThread = validationThreads.get(index);
-	    validationThread.interrupt();
-	    validationThreads.remove(index);
-    }
+	 * @see org.openmrs.module.validation.api.ValidationService#removeValidationThread(int)
+	 */
+	public void removeValidationThread(int index) {
+		ValidationThread validationThread = validationThreads.get(index);
+		validationThread.interrupt();
+		validationThreads.remove(index);
+	}
 	
 }
