@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>validation-api</artifactId>
-			<version>1.0</version>
+			<version>1.0.1</version>
 		</dependency>
 
 		<dependency>
