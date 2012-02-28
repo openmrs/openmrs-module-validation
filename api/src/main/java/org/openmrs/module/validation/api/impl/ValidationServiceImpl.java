@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -30,6 +32,8 @@ import org.openmrs.validator.ValidateUtil;
  *
  */
 public class ValidationServiceImpl implements ValidationService {
+	
+	protected final Log log = LogFactory.getLog(getClass());
 	
 	private SessionFactory sessionFactory;
 	
@@ -76,9 +80,11 @@ public class ValidationServiceImpl implements ValidationService {
 		
 		for (Object object : list) {
 			try {
+				log.info("Validating " + object);
 				ValidateUtil.validate(object);
 			}
 			catch (Exception e) {
+				log.error("Failed to validate " + object, e);
 				errors.put(object, e);
 			}
 		}
