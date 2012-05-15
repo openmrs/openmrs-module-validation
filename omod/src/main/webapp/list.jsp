@@ -21,7 +21,7 @@
 <form method="post" action="validate.form">
 	<p>
 		Enter type to validate: <input type="text" name="type"
-			value="org.openmrs.Concept" /> <input type="submit" />
+			value="org.openmrs.Concept" /> [first: <input type="text" name="first" /> last: <input type="text" name="last" />] <input type="submit" />
 	</p>
 </form>
 

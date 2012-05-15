@@ -57,9 +57,9 @@ public class ValidationController {
 	}
 	
 	@RequestMapping(value = "/module/validation/validate", method = RequestMethod.POST)
-	public ModelAndView validate(@RequestParam("type") String type) {
+	public ModelAndView validate(@RequestParam("type") String type, @RequestParam(value = "first", required = false) Long first, @RequestParam(value = "last", required = false) Long last) {
 		try {
-			getValidationService().startNewValidationThread(type);
+			getValidationService().startNewValidationThread(type, first, last);
 		}
 		catch (Exception e) {
 			log.error("Unable to start validation", e);

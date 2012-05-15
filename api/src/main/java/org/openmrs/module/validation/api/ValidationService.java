@@ -33,7 +33,7 @@ public interface ValidationService {
 	
 	@Authorized("Validate Objects")
 	@Transactional(readOnly = true)
-	void startNewValidationThread(String type);
+	void startNewValidationThread(String type, Long firstObject, Long maxObjects);
 	
 	@Authorized("Validate Objects")
 	List<ValidationThread> getValidationThreads();
