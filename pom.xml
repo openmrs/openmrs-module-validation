@@ -8,12 +8,12 @@
 	<packaging>pom</packaging>
 	<name>Validation</name>
 	
-	<url>http://openmrs.org</url>
+	<url>https://wiki.openmrs.org/x/CwDeAQ</url>
 
 	<scm>
-		<connection>scm:svn:http://svn.openmrs.org/openmrs-modules/validation/trunk/</connection>
-		<developerConnection>scm:svn:http://svn.openmrs.org/openmrs-modules/validation/trunk/</developerConnection>
-		<url>http://svn.openmrs.org/openmrs-modules/validation/trunk/</url>
+		<connection>scm:git:https://github.com/openmrs/openmrs-module-validation/</connection>
+		<developerConnection>scm:git:https://github.com/openmrs/openmrs-module-validation/</developerConnection>
+		<url>scm:git:https://github.com/openmrs/openmrs-module-validation/</url>
 	</scm>
 
 
