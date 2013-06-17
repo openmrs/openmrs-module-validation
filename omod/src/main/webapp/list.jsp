@@ -2,27 +2,63 @@
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
 <h2>
-	<spring:message code="validation.title" />
+    <spring:message code="validation.title"/>
 </h2>
 
-<ol>
-	<c:forEach items="${validationThreads}" var="thread" varStatus="status">
-		<li>${thread.type} - <c:if test="${thread.alive}">
-				<b>(still running)</b>
-			</c:if>${thread.totalObjects -
-			thread.objectsLeftToProcess}/${thread.totalObjects}, errors:
-			${fn:length(thread.errors)} - <a
-			href="report.form?thread=${status.count-1}">show report</a> - <a
-			href="remove.form?thread=${status.count-1}">remove report</a>
-		</li>
-	</c:forEach>
-</ol>
+<%--<script type="text/javascript" src = WEB-INF/scripts/jquery/></script>
+<script type="text/javascript" src = WEB-INF/scripts/jquery/jquery-ui.custom.min.js></script>--%>
 
-<form method="post" action="validate.form">
-	<p>
-		Enter type to validate: <input type="text" name="type"
-			value="org.openmrs.Concept" /> [first: <input type="text" name="first" /> last: <input type="text" name="last" />] <input type="submit" />
-	</p>
-</form>
+<div id="dialog" title="Select Types to Validate">
+    <c:forEach items="${objectTypes}" var="object" varStatus="objects">
+      <input type="checkbox" id="${object}" value="${object}">${object}<br>
+    </c:forEach>
+</div>
+
+<div>
+    <input type="button" name="select_button" id="select_button" value="Select Types" />
+    <input type="button" name="validate_button" id="validate_button" value="Validate"/>
+    <input type="button" name="show_button" id="show_button" value="Show Report"/>
+    <input type="button" name="stop_button" id="stop_button" value="Stop"/>
+</div>
+
+<script>
+    jQuery("div#dialog").dialog ({
+        autoOpen : false,
+        buttons: {
+            "Done": function() {
+                var values =[];
+                jQuery(this).find('input[type="checkbox"]').each(function(){
+                    if(jQuery(this).is(':checked')) {
+                        values[jQuery(this).prop("name")] = jQuery(this).val();
+                        alert(jQuery(this).val());
+                    }
+
+                });
+                jQuery( this ).dialog( "close" );
+            },
+            Cancel: function() {
+                jQuery( this ).dialog( "close" );
+            }
+        }
+    });
+
+    jQuery("#select_button").click (function (event)    // Open button Treatment
+    {
+        jQuery("div#dialog").dialog ("open");
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>
