@@ -1,6 +1,8 @@
+
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
+<%--
 <h2>
 	<spring:message code="validation.title" />
 </h2>
@@ -23,6 +25,6 @@
 		Enter type to validate: <input type="text" name="type"
 			value="org.openmrs.Concept" /> [first: <input type="text" name="first" /> last: <input type="text" name="last" />] <input type="submit" />
 	</p>
-</form>
+</form>    --%>
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>

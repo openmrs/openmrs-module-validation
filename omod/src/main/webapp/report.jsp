@@ -7,7 +7,7 @@
 
 <p><a href="list.form">Back to list</a></p>
 
-<c:if test="${validationThread.alive}"><p><b>Still running...</b></p></c:if>
+<%--<c:if test="${validationThread.alive}"><p><b>Still running...</b></p></c:if>
  
 <p>Type: ${validationThread.type}<br/>
 Total: ${validationThread.totalObjects}<br/>
@@ -29,6 +29,6 @@ Errors: ${fn:length(validationThread.errors)}</p>
 			</tr>
 		</c:forEach>
 	</tbody>
-</table>
+</table>--%>
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>

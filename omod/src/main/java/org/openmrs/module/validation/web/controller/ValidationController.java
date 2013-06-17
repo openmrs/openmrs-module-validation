@@ -16,15 +16,12 @@ package org.openmrs.module.validation.web.controller;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.validation.ValidationThread;
 import org.openmrs.module.validation.api.ValidationService;
+import org.openmrs.module.validation.util.ValidationUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * The main controller.
@@ -39,11 +36,12 @@ public class ValidationController {
 	}
 	
 	@RequestMapping(value = "/module/validation/list", method = RequestMethod.GET)
-	public void showList(ModelMap model) {
+	public void showList(ModelMap model) throws Exception {
 		model.addAttribute("validationThreads", getValidationService().getValidationThreads());
+        model.addAttribute("objectTypes", ValidationUtils.getObjectTypes());
 	}
 	
-	@RequestMapping(value = "/module/validation/remove", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/module/validation/remove", method = RequestMethod.GET)
 	public ModelAndView clearList(@RequestParam("thread") Integer thread) {
 		getValidationService().removeValidationThread(thread);
 		
@@ -66,5 +64,6 @@ public class ValidationController {
 		}
 		
 		return new ModelAndView(new RedirectView("list.form"));
-	}
+	}*/
+
 }
