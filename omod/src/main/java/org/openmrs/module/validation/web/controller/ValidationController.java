@@ -13,11 +13,12 @@
  */
 package org.openmrs.module.validation.web.controller;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.validation.ValidationThread;
 import org.openmrs.module.validation.api.ValidationService;
+import org.openmrs.module.validation.utils.ValidationUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,27 +40,23 @@ public class ValidationController {
 	}
 	
 	@RequestMapping(value = "/module/validation/list", method = RequestMethod.GET)
-	public void showList(ModelMap model) {
-		model.addAttribute("validationThreads", getValidationService().getValidationThreads());
-	}
-	
-	@RequestMapping(value = "/module/validation/remove", method = RequestMethod.GET)
-	public ModelAndView clearList(@RequestParam("thread") Integer thread) {
-		getValidationService().removeValidationThread(thread);
-		
-		return new ModelAndView(new RedirectView("list.form"));
-	}
-	
-	@RequestMapping(value = "/module/validation/report", method = RequestMethod.GET)
-	public void showReport(@RequestParam("thread") Integer thread, ModelMap model) {
-		ValidationThread validationThread = getValidationService().getValidationThreads().get(thread);
-		model.addAttribute("validationThread", validationThread);
+	public void showList(ModelMap model) throws Exception {
+        model.addAttribute("objectTuples", ValidationUtils.getClassNamesToValidate());
 	}
 	
 	@RequestMapping(value = "/module/validation/validate", method = RequestMethod.POST)
-	public ModelAndView validate(@RequestParam("type") String type, @RequestParam(value = "first", required = false) Long first, @RequestParam(value = "last", required = false) Long last) {
+	public ModelAndView validate(@RequestParam("types") String types, ModelMap model) {
+        String[] obtypes = ValidationUtils.getListOfObjectsToValidate(types);
 		try {
-			getValidationService().startNewValidationThread(type, first, last);
+            for(int i=0; i< obtypes.length; i++){
+                if(!StringUtils.isBlank(obtypes[i])) {
+                  log.info("Starting validation thread for " + obtypes[i]);
+                  getValidationService().startNewValidationThread(obtypes[i]);
+                }
+
+            }
+        model.addAttribute("listOfObjects", obtypes);
+
 		}
 		catch (Exception e) {
 			log.error("Unable to start validation", e);
@@ -67,4 +64,5 @@ public class ValidationController {
 		
 		return new ModelAndView(new RedirectView("list.form"));
 	}
+
 }
