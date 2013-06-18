@@ -16,10 +16,17 @@
 </div>
 
 <div id="buttonlist">
-    <input type="button" name="select_button" id="select_button" value="Select Types"/>
-    <input type="button" name="validate_button" id="validate_button" value="Validate"/>
-    <input type="button" name="show_button" id="show_button" value="Show Report"/>
-    <input type="button" name="stop_button" id="stop_button" value="Stop"/>
+    <input type="button" name="select_button" id="select_button" value="Select Types" size="30"/>
+    <input type="button" name="show_button" id="show_button" value="Show Report" size="30"/>
+    <input type="button" name="stop_button" id="stop_button" value="Stop" size="30"/>
+</div>
+
+
+<div id="typesubmitform">
+    <form method="post" action="validate.form">
+      <input type="hidden" name="type" id="type" value=""/>
+      <input type="submit" name="validate_button" id="validate_button" value="Validate" onclick="getCombinedTypeList()"/>
+    </form>
 </div>
 </body>
 
@@ -63,6 +70,17 @@
     jQuery("#select_button").click(function (event) {
         jQuery("div#dialog").dialog("open");
     });
+
+    function getCombinedTypeList(){
+        var combinesTypeString = "";
+        for (var i = 0; i < values.length; i++) {
+            console.log(values[i]);
+            combinesTypeString =combinesTypeString.concat(values[i] + ',');
+        }
+        document.getElementById('type').value = combinesTypeString;
+        console.log(document.getElementById('type').value);
+        //return combinesTypeString;
+    }
 
 </script>
 

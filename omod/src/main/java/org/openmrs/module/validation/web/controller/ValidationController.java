@@ -22,6 +22,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * The main controller.
@@ -52,18 +55,27 @@ public class ValidationController {
 	public void showReport(@RequestParam("thread") Integer thread, ModelMap model) {
 		ValidationThread validationThread = getValidationService().getValidationThreads().get(thread);
 		model.addAttribute("validationThread", validationThread);
-	}
+	} */
 	
 	@RequestMapping(value = "/module/validation/validate", method = RequestMethod.POST)
-	public ModelAndView validate(@RequestParam("type") String type, @RequestParam(value = "first", required = false) Long first, @RequestParam(value = "last", required = false) Long last) {
+	public ModelAndView validate(@RequestParam("type") String type, ModelMap model) {
+        String[] types = ValidationUtils.getListOfObjectsToValidate(type);
 		try {
-			getValidationService().startNewValidationThread(type, first, last);
+            for(int i=0; i< types.length; i++){
+                System.out.println(types[i]);
+                if(!types[i].equals("")) {
+                  getValidationService().startNewValidationThread(types[i]);
+                }
+
+            }
+        model.addAttribute("listOfObjects", types);
+
 		}
 		catch (Exception e) {
 			log.error("Unable to start validation", e);
 		}
 		
 		return new ModelAndView(new RedirectView("list.form"));
-	}*/
+	}
 
 }

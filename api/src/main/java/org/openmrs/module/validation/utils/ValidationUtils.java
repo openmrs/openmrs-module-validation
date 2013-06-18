@@ -38,4 +38,13 @@ public class ValidationUtils {
         }
         return obs;
     }
+
+    public static String[] getListOfObjectsToValidate(String type) {
+        if(type != null && !type.equals("")){
+          return type.trim().split(",");
+        } else {
+            return new String[0];
+        }
+
+    }
 }
