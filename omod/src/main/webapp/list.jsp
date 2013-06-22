@@ -15,24 +15,25 @@
     </c:forEach>
 </div>
 
-<div id="buttonlist">
-    <input type="button" name="select_button" id="select_button" value="Select Types" size="30"/>
-    <input type="button" name="show_button" id="show_button" value="Show Report" size="30"/>
-    <input type="button" name="stop_button" id="stop_button" value="Stop" size="30"/>
-</div>
-
-
 <div id="typesubmitform">
     <form method="post" action="validate.form">
       <input type="hidden" name="type" id="type" value=""/>
-      <input type="submit" name="validate_button" id="validate_button" value="Validate" onclick="getCombinedTypeList()"/>
+      <input type="button" name="select_button" id="select_button"  style="width:150px" value="Select Types"/>
+      <input type="button" name="show_button" id="show_button" style="width:150px" value="Show Report"/>
+      <input type="button" name="stop_button" id="stop_button" style="width:150px" value="Stop Validation"/>
+      <input type="submit" name="validate_button" id="validate_button" style="width:150px" value="Validate Types" onclick="getCombinedTypeList()"/>
     </form>
+</div>
+
+<div id="selectedTypes" class="selectedTypes">
+
 </div>
 </body>
 
 <script>
     var values = new Array();
     var dialogOpen = false;
+    var typeChanged = false;
     jQuery("div#dialog").dialog({
         autoOpen:false,
         height:600,
@@ -56,10 +57,13 @@
         close:function (event, ui) {
             if (dialogOpen) {
                 var breaktag = '<br>';
-                jQuery("div#buttonlist").append(breaktag).append(breaktag);
+                var selecttag = '<h3>Selected types to validate ...</h3>';
+                jQuery('.selectedTypes').empty();
+                jQuery("div#selectedTypes").append(breaktag).append(selecttag);
                 for (var i = 0; i < values.length; i++) {
                     var item = "<p>" + values[i] + "</p>";
-                    jQuery("div#buttonlist").append(item);
+                       jQuery("div#selectedTypes").append(i+1 + ".       ").append(values[i]);
+                       jQuery("div#selectedTypes").append(breaktag);
                 }
                 dialogOpen = false;
             }
@@ -68,19 +72,34 @@
     });
 
     jQuery("#select_button").click(function (event) {
+       /* we do not remove the previously selected items from the dialog window, hence types can be selected/removed
+        *  from the list till it is sent to validation. once a single validate cycle is completed user will be redirected
+        *  to new dialog window. we only empty the values array each time. */
+        values.length=0;
         jQuery("div#dialog").dialog("open");
     });
 
     function getCombinedTypeList(){
+        typeChanged = false;
         var combinesTypeString = "";
         for (var i = 0; i < values.length; i++) {
-            console.log(values[i]);
             combinesTypeString =combinesTypeString.concat(values[i] + ',');
         }
         document.getElementById('type').value = combinesTypeString;
-        console.log(document.getElementById('type').value);
-        //return combinesTypeString;
+
     }
+
+    /*function removeType(typeToRemove){
+       typeChanged = true;
+       var contentString = ":contains(" + typeToRemove + ")";
+        var index = values.indexOf(typeToRemove);
+        if(index!=-1){
+           values.splice(index, 1);
+        }
+        jQuery("p").remove(contentString);
+
+    }*/
+
 
 </script>
 

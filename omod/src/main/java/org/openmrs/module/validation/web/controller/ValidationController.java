@@ -62,8 +62,8 @@ public class ValidationController {
         String[] types = ValidationUtils.getListOfObjectsToValidate(type);
 		try {
             for(int i=0; i< types.length; i++){
-                System.out.println(types[i]);
                 if(!types[i].equals("")) {
+                  log.info("Starting validation thread for " + types[i]);
                   getValidationService().startNewValidationThread(types[i]);
                 }
 
