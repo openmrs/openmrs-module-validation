@@ -30,7 +30,11 @@ public interface ValidationService {
 	@Authorized("Validate Objects")
 	@Transactional(readOnly = true)
 	void validate(String type, long firstObject, long maxObjects, Map<Object, Exception> errors);
-	
+
+    @Authorized("Validate Objects")
+    @Transactional(readOnly = true)
+    void startNewValidationThread(String type, Long firstObject, Long maxObjects);
+
 	@Authorized("Validate Objects")
 	@Transactional(readOnly = true)
 	void startNewValidationThread(String type);

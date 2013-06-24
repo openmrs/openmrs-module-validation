@@ -14,33 +14,35 @@
 
 package org.openmrs.module.validation.utils;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.springframework.validation.Validator;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ValidationUtils {
 
-    public static List<String> getObjectTypes() throws Exception {
-        List<String> obs = new ArrayList<String>();
+    public static Set<String> getClassNamesToValidate() throws Exception {
+        Set<String> classSet = new HashSet<String>();
         List<Validator> validators =  Context.getRegisteredComponents(Validator.class);
         for (Validator validator: validators){
             Handler annotation = validator.getClass().getAnnotation(Handler.class);
             if (annotation != null){
                 Class[] classNames = annotation.supports();
                 for(Class classname: classNames){
-                    obs.add(classname.getName()) ;
+                    classSet.add(classname.getName()) ;
                 }
             }
 
         }
-        return obs;
+        return classSet;
     }
 
     public static String[] getListOfObjectsToValidate(String type) {
-        if(type != null && !type.equals("")){
+        if(type != null && !StringUtils.isBlank(type)){
           return type.trim().split(",");
         } else {
             return new String[0];

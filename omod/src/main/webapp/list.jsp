@@ -10,14 +10,14 @@
 
 <body>
 <div id="dialog" title="Select Types to Validate">
-    <c:forEach items="${objectTypes}" var="object" varStatus="objects">
+    <c:forEach items="${objectTypes}" var="object">
         <input type="checkbox" id="${object}" value="${object}">${object}<br>
     </c:forEach>
 </div>
 
 <div id="typesubmitform">
     <form method="post" action="validate.form">
-      <input type="hidden" name="type" id="type" value=""/>
+      <input type="hidden" name="types" id="types" value=""/>
       <input type="button" name="select_button" id="select_button"  style="width:150px" value="Select Types"/>
       <input type="button" name="show_button" id="show_button" style="width:150px" value="Show Report"/>
       <input type="button" name="stop_button" id="stop_button" style="width:150px" value="Stop Validation"/>
@@ -85,21 +85,9 @@
         for (var i = 0; i < values.length; i++) {
             combinesTypeString =combinesTypeString.concat(values[i] + ',');
         }
-        document.getElementById('type').value = combinesTypeString;
+        document.getElementById('types').value = combinesTypeString;
 
     }
-
-    /*function removeType(typeToRemove){
-       typeChanged = true;
-       var contentString = ":contains(" + typeToRemove + ")";
-        var index = values.indexOf(typeToRemove);
-        if(index!=-1){
-           values.splice(index, 1);
-        }
-        jQuery("p").remove(contentString);
-
-    }*/
-
 
 </script>
 

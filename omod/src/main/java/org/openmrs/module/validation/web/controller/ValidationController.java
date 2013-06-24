@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.validation.web.controller;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
@@ -41,7 +42,7 @@ public class ValidationController {
 	@RequestMapping(value = "/module/validation/list", method = RequestMethod.GET)
 	public void showList(ModelMap model) throws Exception {
 		model.addAttribute("validationThreads", getValidationService().getValidationThreads());
-        model.addAttribute("objectTypes", ValidationUtils.getObjectTypes());
+        model.addAttribute("objectTypes", ValidationUtils.getClassNamesToValidate());
 	}
 	
 	/*@RequestMapping(value = "/module/validation/remove", method = RequestMethod.GET)
@@ -58,17 +59,17 @@ public class ValidationController {
 	} */
 	
 	@RequestMapping(value = "/module/validation/validate", method = RequestMethod.POST)
-	public ModelAndView validate(@RequestParam("type") String type, ModelMap model) {
-        String[] types = ValidationUtils.getListOfObjectsToValidate(type);
+	public ModelAndView validate(@RequestParam("types") String types, ModelMap model) {
+        String[] obtypes = ValidationUtils.getListOfObjectsToValidate(types);
 		try {
-            for(int i=0; i< types.length; i++){
-                if(!types[i].equals("")) {
-                  log.info("Starting validation thread for " + types[i]);
-                  getValidationService().startNewValidationThread(types[i]);
+            for(int i=0; i< obtypes.length; i++){
+                if(!StringUtils.isBlank(obtypes[i])) {
+                  log.info("Starting validation thread for " + obtypes[i]);
+                  getValidationService().startNewValidationThread(obtypes[i]);
                 }
 
             }
-        model.addAttribute("listOfObjects", types);
+        model.addAttribute("listOfObjects", obtypes);
 
 		}
 		catch (Exception e) {

@@ -45,7 +45,40 @@ public class ValidationServiceImpl implements ValidationService {
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	
+
+    /**
+     * @see org.openmrs.module.validation.api.ValidationService#startNewValidationThread(java.lang.String, java.lang.Long, java.lang.Long)
+     */
+    public void startNewValidationThread(String type, Long firstObject, Long lastObject) {
+        Object result = sessionFactory.getCurrentSession().createCriteria(type).addOrder(Order.asc("uuid"))
+                .setProjection(Projections.rowCount()).uniqueResult();
+
+        Long totalObjects = ((Number) result).longValue();
+
+        if (lastObject == null || lastObject > totalObjects) {
+            lastObject = totalObjects;
+        }
+
+        if (firstObject == null || firstObject < 0) {
+            firstObject = 0L;
+        } else if (firstObject > lastObject) {
+            firstObject = lastObject;
+        }
+
+        Long partition = 0L;
+        if (totalObjects > 0) {
+            partition = (lastObject - firstObject) / 10;
+        }
+
+        for (long i = firstObject; i < lastObject; i += partition + 1) {
+            ValidationThread validationThread = new ValidationThread(type, i, partition, Context.getUserContext());
+            validationThread.start();
+
+            validationThreads.add(validationThread);
+        }
+
+    }
+
 	/**
 	 * @see org.openmrs.module.validation.api.ValidationService#startNewValidationThread(java.lang.String)
 	 */
