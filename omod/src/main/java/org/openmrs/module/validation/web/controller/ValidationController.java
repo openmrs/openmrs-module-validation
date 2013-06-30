@@ -45,19 +45,6 @@ public class ValidationController {
         model.addAttribute("objectTypes", ValidationUtils.getClassNamesToValidate());
 	}
 	
-	/*@RequestMapping(value = "/module/validation/remove", method = RequestMethod.GET)
-	public ModelAndView clearList(@RequestParam("thread") Integer thread) {
-		getValidationService().removeValidationThread(thread);
-		
-		return new ModelAndView(new RedirectView("list.form"));
-	}
-	
-	@RequestMapping(value = "/module/validation/report", method = RequestMethod.GET)
-	public void showReport(@RequestParam("thread") Integer thread, ModelMap model) {
-		ValidationThread validationThread = getValidationService().getValidationThreads().get(thread);
-		model.addAttribute("validationThread", validationThread);
-	} */
-	
 	@RequestMapping(value = "/module/validation/validate", method = RequestMethod.POST)
 	public ModelAndView validate(@RequestParam("types") String types, ModelMap model) {
         String[] obtypes = ValidationUtils.getListOfObjectsToValidate(types);

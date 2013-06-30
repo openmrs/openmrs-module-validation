@@ -11,7 +11,7 @@
 <body>
 <div id="dialog" title="Select Types to Validate">
     <c:forEach items="${objectTypes}" var="object">
-        <input type="checkbox" id="${object}" value="${object}">${object}<br>
+        <input type="checkbox" id="${object.fullClassName}" value="${object.fullClassName}">${object.simpleClassName}<br>
     </c:forEach>
 </div>
 
@@ -32,7 +32,7 @@
 
 <script>
     var values = new Array();
-    var dialogOpen = false;
+    var checkDoneButtonClicked = false;
     var typeChanged = false;
     jQuery("div#dialog").dialog({
         autoOpen:false,
@@ -46,24 +46,25 @@
                     }
 
                 });
-                dialogOpen = true;
+                checkDoneButtonClicked = true;
                 jQuery(this).dialog("close");
 
             },
             Cancel:function () {
+                checkDoneButtonClicked = false;
                 jQuery(this).dialog("close");
+
             }
         },
         close:function (event, ui) {
-            if (dialogOpen) {
+            if (checkDoneButtonClicked) {
                 var breaktag = '<br>';
-                var selecttag = '<h3>Selected types to validate ...</h3>';
+                var selecttag = '<h3>Selected Types to Validate...</h3>';
                 jQuery('.selectedTypes').empty();
                 jQuery("div#selectedTypes").append(breaktag).append(selecttag);
                 for (var i = 0; i < values.length; i++) {
-                    var item = "<p>" + values[i] + "</p>";
-                       jQuery("div#selectedTypes").append(i+1 + ".       ").append(values[i]);
-                       jQuery("div#selectedTypes").append(breaktag);
+                    var item = "<li style=\"text-indent:5em;\">" + values[i] + "</li>";
+                    jQuery('div#selectedTypes').append(item);
                 }
                 dialogOpen = false;
             }
@@ -81,11 +82,11 @@
 
     function getCombinedTypeList(){
         typeChanged = false;
-        var combinesTypeString = "";
+        var combinedTypeString = "";
         for (var i = 0; i < values.length; i++) {
-            combinesTypeString =combinesTypeString.concat(values[i] + ',');
+            combinedTypeString =combinedTypeString.concat(values[i] + ',');
         }
-        document.getElementById('types').value = combinesTypeString;
+        document.getElementById('types').value = combinedTypeString;
 
     }
 
