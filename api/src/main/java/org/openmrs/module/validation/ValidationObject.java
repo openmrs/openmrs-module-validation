@@ -3,8 +3,8 @@ package org.openmrs.module.validation;
 
 public class ValidationObject {
 
-    public String fullClassName;
-    public String simpleClassName;
+    String fullClassName;
+    String simpleClassName;
 
     public ValidationObject(String fullClassName, String simpleClassName) {
         this.fullClassName = fullClassName;

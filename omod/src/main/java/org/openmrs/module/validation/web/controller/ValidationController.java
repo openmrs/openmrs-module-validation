@@ -41,8 +41,7 @@ public class ValidationController {
 	
 	@RequestMapping(value = "/module/validation/list", method = RequestMethod.GET)
 	public void showList(ModelMap model) throws Exception {
-		model.addAttribute("validationThreads", getValidationService().getValidationThreads());
-        model.addAttribute("objectTypes", ValidationUtils.getClassNamesToValidate());
+        model.addAttribute("objectTuples", ValidationUtils.getClassNamesToValidate());
 	}
 	
 	@RequestMapping(value = "/module/validation/validate", method = RequestMethod.POST)

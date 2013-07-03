@@ -18,16 +18,23 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.validation.ValidationObject;
+import org.openmrs.module.validation.ValidationObjectTuple;
 import org.springframework.validation.Validator;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class ValidationUtils {
 
-    public static Set<ValidationObject> getClassNamesToValidate() throws Exception {
-            Set<ValidationObject> classSet = new HashSet<ValidationObject>();
+    /**
+     * Gets the list of registered Validator classes in the system
+     * @return  List of Validator classes grouped as tuples
+     * @throws Exception
+     */
+    public static List<ValidationObjectTuple> getClassNamesToValidate() throws Exception {
+        Set<ValidationObject> classSet = new HashSet<ValidationObject>();
         List<Validator> validators =  Context.getRegisteredComponents(Validator.class);
         for (Validator validator: validators){
             Handler annotation = validator.getClass().getAnnotation(Handler.class);
@@ -40,7 +47,46 @@ public class ValidationUtils {
             }
 
         }
-        return classSet;
+        return groupObjectsIntoTuples(classSet);
+    }
+
+    /**
+     * Gets the Validator classes and prepares tuples out of them
+     * @param classSet - List of ValidationObjectTuples
+     * @return
+     */
+    private static List<ValidationObjectTuple> groupObjectsIntoTuples(Set<ValidationObject> classSet) {
+        List<ValidationObjectTuple> objectTuples = new ArrayList<ValidationObjectTuple>();
+        int tuplesCount = classSet.size()/3;
+        int remain = classSet.size()%3;
+        Object[]  classArray = classSet.toArray();
+        int index = 0;
+        for(int i=0; i< tuplesCount; i ++){
+            ValidationObjectTuple tuple = new ValidationObjectTuple();
+            tuple.setFirst((ValidationObject) classArray[index]);
+            tuple.setSecond((ValidationObject) classArray[index+1]);
+            tuple.setThird((ValidationObject) classArray[index+2]);
+            objectTuples.add(tuple);
+            index = index+3;
+
+        }
+
+        // as we create tuples there can be only 1 or 2 objects remained after grouping above. we add the remaining objects
+        // into another ValidationObjectTuple
+        if(remain != 0){
+            ValidationObjectTuple remaintuple = new ValidationObjectTuple();
+            if (remain == 2) {
+                remaintuple.setFirst((ValidationObject) classArray[index]);
+                remaintuple.setSecond((ValidationObject) classArray[index + 1]);
+                remaintuple.setThird(null);
+            } else {
+                remaintuple.setFirst((ValidationObject) classArray[index]);
+                remaintuple.setSecond(null);
+                remaintuple.setThird(null);
+            }
+            objectTuples.add(remaintuple);
+        }
+        return objectTuples;
     }
 
     public static String[] getListOfObjectsToValidate(String type) {
@@ -55,8 +101,8 @@ public class ValidationUtils {
     /**
      * gets the full class name of an object type and make its simple class name
      *
-     * @param section
-     * @return
+     * @param section - full class name string
+     * @return - simple class name
      */
     public static String beautify(String section) {
         section = section.replace(".", " ");
@@ -71,4 +117,5 @@ public class ValidationUtils {
         }
         return simpleClassName;
     }
+
 }

@@ -10,9 +10,28 @@
 
 <body>
 <div id="dialog" title="Select Types to Validate">
-    <c:forEach items="${objectTypes}" var="object">
-        <input type="checkbox" id="${object.fullClassName}" value="${object.fullClassName}">${object.simpleClassName}<br>
-    </c:forEach>
+    <table>
+        <c:forEach items="${objectTuples}" var="objectTuple" >
+            <tr>
+                <td>
+                    <c:if test="${objectTuple.first != null}">
+                        <input type="checkbox" name="type" id="${objectTuple.first.fullClassName}" value="${objectTuple.first.fullClassName}">${objectTuple.first.simpleClassName}
+                    </c:if>
+                </td>
+                <td>
+                    <c:if test="${objectTuple.second != null}">
+                        <input type="checkbox" name="type" id="${objectTuple.second.fullClassName}" value="${objectTuple.second.fullClassName}">${objectTuple.second.simpleClassName}
+                    </c:if>
+                </td>
+                <td>
+                    <c:if test="${objectTuple.third != null}">
+                        <input type="checkbox" name="type" id="${objectTuple.third.fullClassName}" value="${objectTuple.third.fullClassName}">${objectTuple.third.simpleClassName}
+                    </c:if>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+
 </div>
 
 <div id="typesubmitform">
@@ -37,7 +56,7 @@
     jQuery("div#dialog").dialog({
         autoOpen:false,
         height:600,
-        width:800,
+        width:600,
         buttons:{
             "Done":function () {
                 jQuery(this).find('input[type="checkbox"]').each(function () {
