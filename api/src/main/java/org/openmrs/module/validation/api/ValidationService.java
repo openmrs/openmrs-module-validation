@@ -44,4 +44,7 @@ public interface ValidationService {
 	
 	@Authorized("Validate Objects")
 	void removeValidationThread(int index);
+
+    @Authorized("Validate Objects")
+    void removeAllValidationThreads();
 }
