@@ -28,7 +28,7 @@ import java.util.Map;
 public interface ValidationService {
 	
 	@Authorized("Validate Objects")
-	@Transactional()
+	@Transactional(readOnly = true)
 	void validate(String type, long firstObject, long maxObjects, Map<Object, Exception> errors);
 
     @Authorized("Validate Objects")
@@ -36,7 +36,7 @@ public interface ValidationService {
     void startNewValidationThread(String type, Long firstObject, Long maxObjects);
 
 	@Authorized("Validate Objects")
-	@Transactional()
+	@Transactional(readOnly = true)
 	void startNewValidationThread(String type);
 	
 	@Authorized("Validate Objects")
