@@ -44,7 +44,7 @@ public class ValidationController {
         model.addAttribute("objectTuples", ValidationUtils.getClassNamesToValidate());
 	}
 	
-	@RequestMapping(value = "/module/validation/validate", method = RequestMethod.POST)
+	@RequestMapping(value = "/module/validation/validate", params = "validate_button" ,method = RequestMethod.POST)
 	public ModelAndView validate(@RequestParam("types") String types, ModelMap model) {
         String[] obtypes = ValidationUtils.getListOfObjectsToValidate(types);
 		try {
@@ -56,7 +56,7 @@ public class ValidationController {
 
             }
         model.addAttribute("listOfObjects", obtypes);
-
+        model.addAttribute("validationThreads", getValidationService().getValidationThreads());
 		}
 		catch (Exception e) {
 			log.error("Unable to start validation", e);
@@ -65,4 +65,15 @@ public class ValidationController {
 		return new ModelAndView(new RedirectView("list.form"));
 	}
 
+    @RequestMapping(value = "/module/validation/validate", params = "stop_button", method = RequestMethod.POST)
+    public ModelAndView stopValidation() throws Exception {
+        try{
+            getValidationService().removeAllValidationThreads();
+            log.info("Stopped the currently running validation process ");
+        }catch (Exception e){
+            log.error("Unable to stop validation", e);
+        }
+
+        return new ModelAndView(new RedirectView("list.form"));
+    }
 }

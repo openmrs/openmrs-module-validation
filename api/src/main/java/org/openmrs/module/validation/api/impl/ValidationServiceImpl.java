@@ -138,5 +138,15 @@ public class ValidationServiceImpl implements ValidationService {
 		validationThread.interrupt();
 		validationThreads.remove(index);
 	}
+
+    /**
+     * @see org.openmrs.module.validation.api.ValidationService#removeAllValidationThreads()
+     */
+    public void removeAllValidationThreads() {
+        for (ValidationThread thread : validationThreads){
+            thread.interrupt();
+        }
+        validationThreads.clear();
+    }
 	
 }

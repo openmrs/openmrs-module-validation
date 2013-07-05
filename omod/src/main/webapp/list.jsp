@@ -44,7 +44,7 @@
       <input type="hidden" name="types" id="types" value=""/>
       <input type="button" name="select_button" id="select_button"  style="width:150px" value="Select Types"/>
       <input type="button" name="show_button" id="show_button" style="width:150px" value="Show Report"/>
-      <input type="button" name="stop_button" id="stop_button" style="width:150px" value="Stop Validation"/>
+      <input type="submit" name="stop_button" id="stop_button" style="width:150px" value="Stop Validation"/>
       <input type="submit" name="validate_button" id="validate_button" style="width:150px" value="Validate Types" onclick="getCombinedTypeList()"/>
     </form>
 </div>
