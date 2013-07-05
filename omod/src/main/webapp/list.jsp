@@ -4,48 +4,49 @@
 <h2>
     <spring:message code="validation.title"/>
 </h2>
-<br>
+<br/>
 <script type="text/javascript" src=../../scripts/jquery/jquery.min.js></script>
 <script type="text/javascript" src=../../scripts/jquery-ui/js/jquery-ui.custom.min.js></script>
 
 <body>
+
+<div id="progressStatus">
+    <table style="border: none">
+        <tr>
+            <td><h3><spring:message code="validation.is.starting"/></h3></td>
+        </tr>
+    </table>
+</div>
+
+
 <div id="dialog" title="Select Types to Validate">
     <table>
         <tr>
             <td colspan="3">
-                <input type="checkbox" id="all_data_cbs" value=""> All Data
+                <input type="checkbox" id="all_data_cbs" value=""><spring:message code="validation.all.data"/>
             </td>
         </tr>
-        <c:forEach items="${objectTuples}" var="objectTuple" >
-            <tr>
-                <td>
-                    <c:if test="${objectTuple.first != null}">
-                        <input type="checkbox" name="type" id="${objectTuple.first.fullClassName}" value="${objectTuple.first.fullClassName}">${objectTuple.first.simpleClassName}
-                    </c:if>
-                </td>
-                <td>
-                    <c:if test="${objectTuple.second != null}">
-                        <input type="checkbox" name="type" id="${objectTuple.second.fullClassName}" value="${objectTuple.second.fullClassName}">${objectTuple.second.simpleClassName}
-                    </c:if>
-                </td>
-                <td>
-                    <c:if test="${objectTuple.third != null}">
-                        <input type="checkbox" name="type" id="${objectTuple.third.fullClassName}" value="${objectTuple.third.fullClassName}">${objectTuple.third.simpleClassName}
-                    </c:if>
-                </td>
-            </tr>
+        <tr>
+            <c:forEach items="${classNamesMap}" var="className" varStatus="loop">
+                <c:if test="${not loop.first and loop.index % 3 == 0}">
+                    </tr><tr>
+                </c:if>
+        <td>
+            <input type="checkbox" name="type" id="type" value="${className.value}">${className.key}
+        </td>
         </c:forEach>
+        </tr>
     </table>
-
 </div>
 
 <div id="typesubmitform">
     <form method="post" action="validate.form">
       <input type="hidden" name="types" id="types" value=""/>
-      <input type="button" name="select_button" id="select_button"  style="width:150px" value="Select Types"/>
-      <input type="button" name="show_button" id="show_button" style="width:150px" value="Show Report"/>
-      <input type="button" name="stop_button" id="stop_button" style="width:150px" value="Stop Validation"/>
-      <input type="submit" name="validate_button" id="validate_button" style="width:150px" value="Validate Types" onclick="getCombinedTypeList()"/>
+
+      <button type="button" name="select_button" id="select_button"  style="width:150px"><spring:message code="validation.select.types"/></button>
+      <button type="button" name="show_button" id="show_button" style="width:150px"><spring:message code="validation.show.report"/></button>
+      <button type="submit" name="stop_button" id="stop_button" style="width:150px"><spring:message code="validation.stop.validation"/></button>
+      <button type="submit" name="validate_button" id="validate_button" style="width:150px" onclick="getCombinedTypeList()"><spring:message code="validation.validate.types"/></button>
     </form>
 </div>
 
@@ -55,9 +56,9 @@
 </body>
 
 <script>
+    jQuery("#progressStatus").hide();
     var values = new Array();
     var checkDoneButtonClicked = false;
-    var typeChanged = false;
     jQuery("div#dialog").dialog({
         autoOpen:false,
         height:600,
@@ -92,16 +93,14 @@
         close:function (event, ui) {
             if (checkDoneButtonClicked) {
                 var breaktag = '<br>';
-                var selecttag = '<h3>Selected Types to Validate...</h3>';
+                var selecttag = '<h3><spring:message code="validation.selected.types.to.validate"/></h3>';
                 jQuery('.selectedTypes').empty();
                 jQuery("div#selectedTypes").append(breaktag).append(selecttag);
                 for (var i = 0; i < values.length; i++) {
                     var item = "<li style=\"text-indent:5em;\">" + values[i] + "</li>";
                     jQuery('div#selectedTypes').append(item);
                 }
-                dialogOpen = false;
             }
-
         }
     });
 
@@ -114,7 +113,6 @@
     });
 
     function getCombinedTypeList(){
-        typeChanged = false;
         var combinedTypeString = "";
         for (var i = 0; i < values.length; i++) {
             combinedTypeString =combinedTypeString.concat(values[i] + ',');

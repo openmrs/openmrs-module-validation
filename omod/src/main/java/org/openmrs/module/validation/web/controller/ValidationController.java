@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.validation.api.ValidationService;
 import org.openmrs.module.validation.utils.ValidationUtils;
+import org.openmrs.web.WebConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 /**
  * The main controller.
@@ -41,11 +46,12 @@ public class ValidationController {
 	
 	@RequestMapping(value = "/module/validation/list", method = RequestMethod.GET)
 	public void showList(ModelMap model) throws Exception {
-        model.addAttribute("objectTuples", ValidationUtils.getClassNamesToValidate());
+        model.addAttribute("classNamesMap", ValidationUtils.getClassNamesToValidate());
 	}
 	
-	@RequestMapping(value = "/module/validation/validate", method = RequestMethod.POST)
-	public ModelAndView validate(@RequestParam("types") String types, ModelMap model) {
+	@RequestMapping(value = "/module/validation/validate", params = "validate_button" , method = RequestMethod.POST)
+    public ModelAndView validate(@RequestParam("types") String types, HttpServletRequest request, ModelMap model) {
+        HttpSession httpSession = request.getSession();
         String[] obtypes = ValidationUtils.getListOfObjectsToValidate(types);
 		try {
             for(int i=0; i< obtypes.length; i++){
@@ -56,13 +62,25 @@ public class ValidationController {
 
             }
         model.addAttribute("listOfObjects", obtypes);
-
+        httpSession.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "validation.started");
 		}
 		catch (Exception e) {
 			log.error("Unable to start validation", e);
 		}
-		
 		return new ModelAndView(new RedirectView("list.form"));
 	}
 
+    @RequestMapping(value = "/module/validation/validate", params = "stop_button", method = RequestMethod.POST)
+    public ModelAndView stopValidation(HttpServletRequest request) throws Exception {
+        try{
+            HttpSession httpSession = request.getSession();
+            getValidationService().removeAllValidationThreads();
+            log.info("Stopped the currently running validation process ");
+            httpSession.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "validation.stopped");
+        }catch (Exception e){
+            log.error("Unable to stop validation", e);
+        }
+
+        return new ModelAndView(new RedirectView("list.form"));
+    }
 }
