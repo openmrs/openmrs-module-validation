@@ -11,6 +11,11 @@
 <body>
 <div id="dialog" title="Select Types to Validate">
     <table>
+        <tr>
+            <td colspan="3">
+                <input type="checkbox" id="all_data_cbs" value=""> All Data
+            </td>
+        </tr>
         <c:forEach items="${objectTuples}" var="objectTuple" >
             <tr>
                 <td>
@@ -59,12 +64,21 @@
         width:600,
         buttons:{
             "Done":function () {
-                jQuery(this).find('input[type="checkbox"]').each(function () {
-                    if (jQuery(this).is(':checked')) {
-                        values.push(jQuery(this).val());
-                    }
+                if(jQuery('#all_data_cbs').is(':checked')) {
+                    jQuery(this).find('input[type="checkbox"]').each(function () {
+                        if (jQuery(this).val() != "") {
+                            values.push(jQuery(this).val());
+                        }
 
-                });
+                    });
+                } else{
+                    jQuery(this).find('input[type="checkbox"]').each(function () {
+                        if (jQuery(this).is(':checked')) {
+                            values.push(jQuery(this).val());
+                        }
+
+                    });
+                }
                 checkDoneButtonClicked = true;
                 jQuery(this).dialog("close");
 
