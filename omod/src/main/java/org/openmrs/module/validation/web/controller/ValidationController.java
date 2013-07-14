@@ -70,11 +70,13 @@ public class ValidationController {
 		return new ModelAndView(new RedirectView("list.form"));
 	}
 
-    @RequestMapping(value = "/module/validation/validate", params = "stop_button", method = RequestMethod.POST)
-    public ModelAndView stopValidation() throws Exception {
+    @RequestMapping(value = "/module/validation/stop", method = RequestMethod.GET)
+    public ModelAndView stopValidation(HttpServletRequest request) throws Exception {
         try{
+            HttpSession httpSession = request.getSession();
             getValidationService().removeAllValidationThreads();
             log.info("Stopped the currently running validation process ");
+            httpSession.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "validation.stopped");
         }catch (Exception e){
             log.error("Unable to stop validation", e);
         }
