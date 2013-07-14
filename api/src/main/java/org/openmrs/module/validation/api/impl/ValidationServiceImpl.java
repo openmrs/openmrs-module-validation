@@ -48,6 +48,7 @@ public class ValidationServiceImpl implements ValidationService {
 
     /**
      * @see org.openmrs.module.validation.api.ValidationService#startNewValidationThread(java.lang.String, java.lang.Long, java.lang.Long)
+     * @deprecated
      */
     public void startNewValidationThread(String type, Long firstObject, Long lastObject) {
         Object result = sessionFactory.getCurrentSession().createCriteria(type).addOrder(Order.asc("uuid"))
@@ -81,10 +82,10 @@ public class ValidationServiceImpl implements ValidationService {
 
 	/**
 	 * @see org.openmrs.module.validation.api.ValidationService#startNewValidationThread(java.lang.String)
+     * @should verify all validation threads have started
 	 */
 	public void startNewValidationThread(String type) {
-		Object result = sessionFactory.getCurrentSession().createCriteria(type).addOrder(Order.asc("uuid"))
-		        .setProjection(Projections.rowCount()).uniqueResult();
+		Object result = sessionFactory.getCurrentSession().createCriteria(type).setProjection(Projections.rowCount()).uniqueResult();
 		
 		Long totalObjects = ((Number) result).longValue();
 
@@ -105,6 +106,7 @@ public class ValidationServiceImpl implements ValidationService {
 	/**
 	 * @see org.openmrs.module.validation.api.ValidationService#validate(java.lang.String, long,
 	 *      long, java.util.Map)
+     * @should verify validation is completed
 	 */
 	public void validate(String type, long firstObject, long maxObjects, Map<Object, Exception> errors) {
 		@SuppressWarnings("unchecked")
@@ -125,6 +127,7 @@ public class ValidationServiceImpl implements ValidationService {
 	
 	/**
 	 * @see org.openmrs.module.validation.api.ValidationService#getValidationThreads()
+     * @should verify thread count is correct
 	 */
 	public List<ValidationThread> getValidationThreads() {
 		return new ArrayList<ValidationThread>(validationThreads);

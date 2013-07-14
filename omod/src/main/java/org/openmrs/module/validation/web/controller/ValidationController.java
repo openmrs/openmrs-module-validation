@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.validation.api.ValidationService;
 import org.openmrs.module.validation.utils.ValidationUtils;
+import org.openmrs.web.WebConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * The main controller.
@@ -44,8 +48,9 @@ public class ValidationController {
         model.addAttribute("objectTuples", ValidationUtils.getClassNamesToValidate());
 	}
 	
-	@RequestMapping(value = "/module/validation/validate", params = "validate_button" ,method = RequestMethod.POST)
-	public ModelAndView validate(@RequestParam("types") String types, ModelMap model) {
+	@RequestMapping(value = "/module/validation/validate", method = RequestMethod.POST)
+	public ModelAndView validate(@RequestParam("types") String types, HttpServletRequest request, ModelMap model) {
+        HttpSession httpSession = request.getSession();
         String[] obtypes = ValidationUtils.getListOfObjectsToValidate(types);
 		try {
             for(int i=0; i< obtypes.length; i++){
@@ -56,7 +61,7 @@ public class ValidationController {
 
             }
         model.addAttribute("listOfObjects", obtypes);
-        model.addAttribute("validationThreads", getValidationService().getValidationThreads());
+        httpSession.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "validation.completed");
 		}
 		catch (Exception e) {
 			log.error("Unable to start validation", e);

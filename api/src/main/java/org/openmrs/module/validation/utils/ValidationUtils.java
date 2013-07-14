@@ -22,9 +22,9 @@ import org.openmrs.module.validation.ValidationObjectTuple;
 import org.springframework.validation.Validator;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class ValidationUtils {
 
@@ -34,7 +34,7 @@ public class ValidationUtils {
      * @throws Exception
      */
     public static List<ValidationObjectTuple> getClassNamesToValidate() throws Exception {
-        Set<ValidationObject> classSet = new HashSet<ValidationObject>();
+        Set<ValidationObject> classSet = new TreeSet<ValidationObject>();
         List<Validator> validators =  Context.getRegisteredComponents(Validator.class);
         for (Validator validator: validators){
             Handler annotation = validator.getClass().getAnnotation(Handler.class);

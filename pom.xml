@@ -62,16 +62,14 @@
 				<type>jar</type>
 				<scope>test</scope>
 			</dependency>
-			
-						
-			
 		</dependencies>
 	</dependencyManagement>
 	
 	
     
 	<properties>
-		<openMRSVersion>1.7.0</openMRSVersion>
+		<openMRSVersion>1.10.0-SNAPSHOT</openMRSVersion>
+        <springVersion>3.0.5.RELEASE</springVersion>
 	</properties>
 
 	<build>

@@ -1,7 +1,7 @@
 package org.openmrs.module.validation;
 
 
-public class ValidationObject {
+public class ValidationObject implements Comparable<ValidationObject>{
 
     String fullClassName;
     String simpleClassName;
@@ -25,5 +25,9 @@ public class ValidationObject {
 
     public void setSimpleClassName(String simpleClassName) {
         this.simpleClassName = simpleClassName;
+    }
+
+    public int compareTo(ValidationObject o) {
+        return this.simpleClassName.compareTo(o.simpleClassName);
     }
 }
