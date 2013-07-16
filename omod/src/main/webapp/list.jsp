@@ -4,16 +4,15 @@
 <h2>
     <spring:message code="validation.title"/>
 </h2>
-<br>
+<br/>
 <script type="text/javascript" src=../../scripts/jquery/jquery.min.js></script>
 <script type="text/javascript" src=../../scripts/jquery-ui/js/jquery-ui.custom.min.js></script>
 
 <body>
 
 <div id="progressStatus">
-    <c:if test="${listOfObjects == null}">
-      <h3><spring:message code="validation.in.progress"/><a href="stop.form">Stop</a></h3>
-    </c:if>
+   <h3><spring:message code="validation.in.progress"/>&nbsp;&nbsp;<a href="stop.form">Stop Validation</a></h3>
+   <br/>
 </div>
 
 
@@ -52,7 +51,6 @@
       <input type="hidden" name="types" id="types" value=""/>
       <input type="button" name="select_button" id="select_button"  style="width:150px" value="Select Types"/>
       <input type="button" name="show_button" id="show_button" style="width:150px" value="Show Report"/>
-      <input type="button" name="stop_button" id="stop_button" style="width:150px" value="Stop Validation"/>
       <input type="submit" name="validate_button" id="validate_button" style="width:150px" value="Validate Types" onclick="getCombinedTypeList()"/>
     </form>
 </div>
@@ -63,6 +61,7 @@
 </body>
 
 <script>
+    jQuery("#progressStatus").hide();
     var values = new Array();
     var checkDoneButtonClicked = false;
     var typeChanged = false;
@@ -122,6 +121,7 @@
     });
 
     function getCombinedTypeList(){
+        jQuery("#progressStatus").show();
         typeChanged = false;
         var combinedTypeString = "";
         for (var i = 0; i < values.length; i++) {
