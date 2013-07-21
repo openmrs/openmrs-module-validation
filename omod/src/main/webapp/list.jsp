@@ -11,8 +11,12 @@
 <body>
 
 <div id="progressStatus">
-   <h3><spring:message code="validation.in.progress"/>&nbsp;&nbsp;<a href="stop.form">Stop Validation</a></h3>
-   <br/>
+    <table style="border: none">
+        <tr>
+            <td><h3><spring:message code="validation.in.progress"/></h3></td>
+            <td><a href="stop.form">Stop</a></td>
+        </tr>
+    </table>
 </div>
 
 
@@ -61,7 +65,7 @@
 </body>
 
 <script>
-    jQuery("#progressStatus").hide();
+    /*jQuery("#progressStatus").hide();*/
     var values = new Array();
     var checkDoneButtonClicked = false;
     var typeChanged = false;
