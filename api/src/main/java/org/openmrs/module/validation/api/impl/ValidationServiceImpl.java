@@ -107,6 +107,7 @@ public class ValidationServiceImpl implements ValidationService {
 	 * @see org.openmrs.module.validation.api.ValidationService#validate(java.lang.String, long,
 	 *      long, java.util.Map)
      * @should verify validation is completed
+     *
 	 */
 	public void validate(String type, long firstObject, long maxObjects, Map<Object, Exception> errors) {
 		@SuppressWarnings("unchecked")
@@ -124,10 +125,10 @@ public class ValidationServiceImpl implements ValidationService {
 			}
 		}
 	}
-	
+
 	/**
 	 * @see org.openmrs.module.validation.api.ValidationService#getValidationThreads()
-     * @should verify thread count is correct
+     * @should verify thread count is not 0
 	 */
 	public List<ValidationThread> getValidationThreads() {
 		return new ArrayList<ValidationThread>(validationThreads);
