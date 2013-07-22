@@ -30,6 +30,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 /**
  * The main controller.
@@ -45,7 +46,7 @@ public class ValidationController {
 	
 	@RequestMapping(value = "/module/validation/list", method = RequestMethod.GET)
 	public void showList(ModelMap model) throws Exception {
-        model.addAttribute("objectTuples", ValidationUtils.getClassNamesToValidate());
+        model.addAttribute("classNamesMap", ValidationUtils.getClassNamesToValidate());
 	}
 	
 	@RequestMapping(value = "/module/validation/validate", method = RequestMethod.POST)
@@ -61,12 +62,11 @@ public class ValidationController {
 
             }
         model.addAttribute("listOfObjects", obtypes);
-        httpSession.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "validation.completed");
+        httpSession.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "validation.started");
 		}
 		catch (Exception e) {
 			log.error("Unable to start validation", e);
 		}
-		
 		return new ModelAndView(new RedirectView("list.form"));
 	}
 

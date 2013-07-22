@@ -68,8 +68,7 @@
 	
     
 	<properties>
-		<openMRSVersion>1.10.0-SNAPSHOT</openMRSVersion>
-        <springVersion>3.0.5.RELEASE</springVersion>
+		<openMRSVersion>1.7.0</openMRSVersion>
 	</properties>
 
 	<build>
