@@ -38,6 +38,9 @@ public class ValidationThread extends Thread {
 	private final Map<Object, Exception> errors;
 	
 	private volatile long objectsLeftToProcess;
+
+    private boolean isDead;
+
 	
 	public ValidationThread(String type, long startFrom, long totalObjects, UserContext userContext) {
 		this.userContext = userContext;
@@ -82,8 +85,16 @@ public class ValidationThread extends Thread {
 	public Map<Object, Exception> getErrors() {
 		return errors;
 	}
-	
-	/**
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
+
+    /**
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
@@ -101,6 +112,7 @@ public class ValidationThread extends Thread {
 				objectsLeftToProcess = 0;
 			}
 		}
+        isDead = true;
 	}
 	
 }
