@@ -13,8 +13,7 @@
 <div id="progressStatus">
     <table style="border: none">
         <tr>
-            <td><h3><spring:message code="validation.in.progress"/></h3></td>
-            <td><a href="stop.form">Stop</a></td>
+            <td><h3><spring:message code="validation.is.starting"/></h3></td>
         </tr>
     </table>
 </div>
@@ -38,7 +37,6 @@
         </c:forEach>
         </tr>
     </table>
-
 </div>
 
 <div id="typesubmitform">
@@ -46,7 +44,7 @@
       <input type="hidden" name="types" id="types" value=""/>
       <button type="button" name="select_button" id="select_button"  style="width:150px"><spring:message code="validation.select.types"/></button>
       <button type="button" name="show_button" id="show_button" style="width:150px"><spring:message code="validation.show.report"/></button>
-      <button type="button" name="stop_button" id="stop_button" style="width:150px"><spring:message code="validation.stop.validation"/></button>
+      <button type="submit" name="stop_button" id="stop_button" style="width:150px"><spring:message code="validation.stop.validation"/></button>
       <button type="submit" name="validate_button" id="validate_button" style="width:150px" onclick="getCombinedTypeList()"><spring:message code="validation.validate.types"/></button>
     </form>
 </div>
@@ -57,7 +55,7 @@
 </body>
 
 <script>
-    /*jQuery("#progressStatus").hide();*/
+    jQuery("#progressStatus").hide();
     var values = new Array();
     var checkDoneButtonClicked = false;
     jQuery("div#dialog").dialog({

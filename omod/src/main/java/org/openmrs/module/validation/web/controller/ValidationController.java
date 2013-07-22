@@ -49,7 +49,7 @@ public class ValidationController {
         model.addAttribute("classNamesMap", ValidationUtils.getClassNamesToValidate());
 	}
 	
-	@RequestMapping(value = "/module/validation/validate", method = RequestMethod.POST)
+	@RequestMapping(value = "/module/validation/validate", params = "validate_button" , method = RequestMethod.POST)
 	public ModelAndView validate(@RequestParam("types") String types, HttpServletRequest request, ModelMap model) {
         HttpSession httpSession = request.getSession();
         String[] obtypes = ValidationUtils.getListOfObjectsToValidate(types);
@@ -70,7 +70,7 @@ public class ValidationController {
 		return new ModelAndView(new RedirectView("list.form"));
 	}
 
-    @RequestMapping(value = "/module/validation/stop", method = RequestMethod.GET)
+    @RequestMapping(value = "/module/validation/validate", params = "stop_button", method = RequestMethod.POST)
     public ModelAndView stopValidation(HttpServletRequest request) throws Exception {
         try{
             HttpSession httpSession = request.getSession();
