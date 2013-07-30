@@ -4,11 +4,21 @@
 <h2>
     <spring:message code="validation.title"/>
 </h2>
-<br>
+<br/>
 <script type="text/javascript" src=../../scripts/jquery/jquery.min.js></script>
 <script type="text/javascript" src=../../scripts/jquery-ui/js/jquery-ui.custom.min.js></script>
 
 <body>
+
+<div id="progressStatus">
+    <table style="border: none">
+        <tr>
+            <td><h3><spring:message code="validation.is.starting"/></h3></td>
+        </tr>
+    </table>
+</div>
+
+
 <div id="dialog" title="Select Types to Validate">
     <table>
         <tr>
@@ -27,7 +37,6 @@
         </c:forEach>
         </tr>
     </table>
-
 </div>
 
 <div id="typesubmitform">
@@ -35,7 +44,7 @@
       <input type="hidden" name="types" id="types" value=""/>
       <button type="button" name="select_button" id="select_button"  style="width:150px"><spring:message code="validation.select.types"/></button>
       <button type="button" name="show_button" id="show_button" style="width:150px"><spring:message code="validation.show.report"/></button>
-      <button type="button" name="stop_button" id="stop_button" style="width:150px"><spring:message code="validation.stop.validation"/></button>
+      <button type="submit" name="stop_button" id="stop_button" style="width:150px"><spring:message code="validation.stop.validation"/></button>
       <button type="submit" name="validate_button" id="validate_button" style="width:150px" onclick="getCombinedTypeList()"><spring:message code="validation.validate.types"/></button>
     </form>
 </div>
@@ -46,6 +55,7 @@
 </body>
 
 <script>
+    jQuery("#progressStatus").hide();
     var values = new Array();
     var checkDoneButtonClicked = false;
     jQuery("div#dialog").dialog({
@@ -102,6 +112,7 @@
     });
 
     function getCombinedTypeList(){
+        jQuery("#progressStatus").show();
         var combinedTypeString = "";
         for (var i = 0; i < values.length; i++) {
             combinedTypeString =combinedTypeString.concat(values[i] + ',');
