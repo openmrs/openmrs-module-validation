@@ -13,11 +13,6 @@
  */
 package org.openmrs.module.validation.api.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
@@ -27,6 +22,11 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.validation.ValidationThread;
 import org.openmrs.module.validation.api.ValidationService;
 import org.openmrs.validator.ValidateUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -45,32 +45,56 @@ public class ValidationServiceImpl implements ValidationService {
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	
+
+    /**
+     * @see org.openmrs.module.validation.api.ValidationService#startNewValidationThread(java.lang.String, java.lang.Long, java.lang.Long)
+     * @deprecated
+     */
+    public void startNewValidationThread(String type, Long firstObject, Long lastObject) {
+        Object result = sessionFactory.getCurrentSession().createCriteria(type).addOrder(Order.asc("uuid"))
+                .setProjection(Projections.rowCount()).uniqueResult();
+
+        Long totalObjects = ((Number) result).longValue();
+
+        if (lastObject == null || lastObject > totalObjects) {
+            lastObject = totalObjects;
+        }
+
+        if (firstObject == null || firstObject < 0) {
+            firstObject = 0L;
+        } else if (firstObject > lastObject) {
+            firstObject = lastObject;
+        }
+
+        Long partition = 0L;
+        if (totalObjects > 0) {
+            partition = (lastObject - firstObject) / 10;
+        }
+
+        for (long i = firstObject; i < lastObject; i += partition + 1) {
+            ValidationThread validationThread = new ValidationThread(type, i, partition, Context.getUserContext());
+            validationThread.start();
+
+            validationThreads.add(validationThread);
+        }
+
+    }
+
 	/**
-	 * @see org.openmrs.module.validation.api.ValidationService#startNewValidationThread(java.lang.Class)
+	 * @see org.openmrs.module.validation.api.ValidationService#startNewValidationThread(java.lang.String)
+     * @should verify all validation threads have started
 	 */
-	public void startNewValidationThread(String type, Long firstObject, Long lastObject) {
-		Object result = sessionFactory.getCurrentSession().createCriteria(type).addOrder(Order.asc("uuid"))
-		        .setProjection(Projections.rowCount()).uniqueResult();
+	public void startNewValidationThread(String type) {
+		Object result = sessionFactory.getCurrentSession().createCriteria(type).setProjection(Projections.rowCount()).uniqueResult();
 		
 		Long totalObjects = ((Number) result).longValue();
-		
-		if (lastObject == null || lastObject > totalObjects) {
-			lastObject = totalObjects;
-		}
-		
-		if (firstObject == null || firstObject < 0) {
-			firstObject = 0L;
-		} else if (firstObject > lastObject) {
-			firstObject = lastObject;
-		}
-		
+
 		Long partition = 0L;
 		if (totalObjects > 0) {
-			partition = (lastObject - firstObject) / 10;
+			partition = (totalObjects) / 10;
 		}
 		
-		for (long i = firstObject; i < lastObject; i += partition + 1) {
+		for (long i = 0; i < totalObjects; i += partition + 1) {
 			ValidationThread validationThread = new ValidationThread(type, i, partition, Context.getUserContext());
 			validationThread.start();
 			
@@ -80,8 +104,10 @@ public class ValidationServiceImpl implements ValidationService {
 	}
 	
 	/**
-	 * @see org.openmrs.module.validation.api.ValidationService#validate(java.lang.Class, long,
+	 * @see org.openmrs.module.validation.api.ValidationService#validate(java.lang.String, long,
 	 *      long, java.util.Map)
+     * @should verify validation is completed
+     *
 	 */
 	public void validate(String type, long firstObject, long maxObjects, Map<Object, Exception> errors) {
 		@SuppressWarnings("unchecked")
@@ -94,14 +120,15 @@ public class ValidationServiceImpl implements ValidationService {
 				ValidateUtil.validate(object);
 			}
 			catch (Exception e) {
-				log.error("Failed to validate " + object, e);
+				log.error("Validation fails for:" + object + " as " + e.getMessage() );
 				errors.put(object, e);
 			}
 		}
 	}
-	
+
 	/**
 	 * @see org.openmrs.module.validation.api.ValidationService#getValidationThreads()
+     * @should verify thread count is not 0
 	 */
 	public List<ValidationThread> getValidationThreads() {
 		return new ArrayList<ValidationThread>(validationThreads);
