@@ -42,8 +42,9 @@
 <div id="typesubmitform">
     <form method="post" action="validate.form">
       <input type="hidden" name="types" id="types" value=""/>
+
       <button type="button" name="select_button" id="select_button"  style="width:150px"><spring:message code="validation.select.types"/></button>
-      <button type="button" name="show_button" id="show_button" style="width:150px" onclick="window.location.href=validate.jsp"><spring:message code="validation.show.report"/></button>
+      <button type="button" name="show_button" id="show_button" style="width:150px"><spring:message code="validation.show.report"/></button>
       <button type="submit" name="stop_button" id="stop_button" style="width:150px"><spring:message code="validation.stop.validation"/></button>
       <button type="submit" name="validate_button" id="validate_button" style="width:150px" onclick="getCombinedTypeList()"><spring:message code="validation.validate.types"/></button>
     </form>
@@ -112,7 +113,6 @@
     });
 
     function getCombinedTypeList(){
-        jQuery("#progressStatus").show();
         var combinedTypeString = "";
         for (var i = 0; i < values.length; i++) {
             combinedTypeString =combinedTypeString.concat(values[i] + ',');

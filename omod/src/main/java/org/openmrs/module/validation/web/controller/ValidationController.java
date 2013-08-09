@@ -31,8 +31,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The main controller.
@@ -52,21 +50,18 @@ public class ValidationController {
 	}
 	
 	@RequestMapping(value = "/module/validation/validate", params = "validate_button" , method = RequestMethod.POST)
-	public ModelAndView validate(@RequestParam("types") String types, HttpServletRequest request, ModelMap model) {
+    public ModelAndView validate(@RequestParam("types") String types, HttpServletRequest request, ModelMap model) {
         HttpSession httpSession = request.getSession();
-        Map<Object, Exception> allErrors = new ConcurrentHashMap<Object, Exception>();
         String[] obtypes = ValidationUtils.getListOfObjectsToValidate(types);
 		try {
             for(int i=0; i< obtypes.length; i++){
                 if(!StringUtils.isBlank(obtypes[i])) {
                   log.info("Starting validation thread for " + obtypes[i]);
-                    Map<Object, Exception> errors = getValidationService().startNewValidationThread(obtypes[i]);
-                    allErrors.putAll(errors);
+                  getValidationService().startNewValidationThread(obtypes[i]);
                 }
 
             }
         model.addAttribute("listOfObjects", obtypes);
-        model.addAttribute("allErrors", allErrors);
         httpSession.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "validation.started");
 		}
 		catch (Exception e) {
@@ -88,18 +83,4 @@ public class ValidationController {
 
         return new ModelAndView(new RedirectView("list.form"));
     }
-
-    /*@RequestMapping(value = "/module/validation/validate", params = "show_button", method = RequestMethod.POST)
-    public void showReport() throws Exception {
-        *//*try{
-
-            getValidationService().removeAllValidationThreads();
-            log.info("Stopped the currently running validation process ");
-
-        }catch (Exception e){
-            log.error("Unable to stop validation", e);
-        }
-
-        return new ModelAndView(new RedirectView("list.form"));*//*
-    }*/
 }

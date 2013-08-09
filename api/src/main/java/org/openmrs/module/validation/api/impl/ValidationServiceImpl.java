@@ -26,7 +26,6 @@ import org.openmrs.validator.ValidateUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -85,8 +84,7 @@ public class ValidationServiceImpl implements ValidationService {
 	 * @see org.openmrs.module.validation.api.ValidationService#startNewValidationThread(java.lang.String)
      * @should verify all validation threads have started
 	 */
-	public Map<Object, Exception> startNewValidationThread(String type) throws InterruptedException {
-        Map<Object, Exception> errors = new ConcurrentHashMap<Object, Exception>();
+	public void startNewValidationThread(String type) {
 		Object result = sessionFactory.getCurrentSession().createCriteria(type).setProjection(Projections.rowCount()).uniqueResult();
 		
 		Long totalObjects = ((Number) result).longValue();
@@ -99,11 +97,10 @@ public class ValidationServiceImpl implements ValidationService {
 		for (long i = 0; i < totalObjects; i += partition + 1) {
 			ValidationThread validationThread = new ValidationThread(type, i, partition, Context.getUserContext());
 			validationThread.start();
-            Thread.sleep(2000); // we will wait 2s to let the validation thread to run and identify the errors
+			
 			validationThreads.add(validationThread);
-            errors.putAll(validationThread.getErrors());
 		}
-		return errors;
+		
 	}
 	
 	/**

@@ -29,7 +29,7 @@ public interface ValidationService {
 	
 	@Authorized("Validate Objects")
 	@Transactional(readOnly = true)
-    void validate(String type, long firstObject, long maxObjects, Map<Object, Exception> errors);
+	void validate(String type, long firstObject, long maxObjects, Map<Object, Exception> errors);
 
     @Authorized("Validate Objects")
     @Transactional(readOnly = true)
@@ -37,7 +37,7 @@ public interface ValidationService {
 
 	@Authorized("Validate Objects")
 	@Transactional(readOnly = true)
-    Map<Object, Exception> startNewValidationThread(String type) throws InterruptedException;
+	void startNewValidationThread(String type);
 	
 	@Authorized("Validate Objects")
 	List<ValidationThread> getValidationThreads();
