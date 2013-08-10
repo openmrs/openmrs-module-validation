@@ -49,6 +49,7 @@ public class ValidationThread extends Thread {
 		this.startFrom = startFrom;
 		this.objectsLeftToProcess = totalObjects;
 		errors = new ConcurrentHashMap<Object, Exception>();
+
 	}
 	
 	/**

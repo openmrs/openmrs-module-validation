@@ -22,7 +22,6 @@
 			<artifactId>library-name</artifactId>
 		</dependency>
 		-->
-
 		
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
