@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.validation.ValidationThread;
 import org.openmrs.module.validation.api.ValidationService;
 import org.openmrs.module.validation.utils.ValidationUtils;
 import org.openmrs.web.WebConstants;
@@ -31,6 +32,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The main controller.
@@ -82,5 +86,24 @@ public class ValidationController {
         }
 
         return new ModelAndView(new RedirectView("list.form"));
+    }
+
+    @RequestMapping(value = "/module/validation/validate", params = "show_button", method = RequestMethod.POST)
+    public void showReport(ModelMap model) throws Exception {
+        Map<Object, Exception> allErrors = new ConcurrentHashMap<Object, Exception>();
+        try{
+
+            List<ValidationThread> runningThreads = getValidationService().getValidationThreads();
+            for (ValidationThread thread : runningThreads){
+                Map<Object, Exception> errors = thread.getErrors();
+                allErrors.putAll(errors);
+            }
+            log.info("Combined all validation errors into one Map");
+            getValidationService().removeAllValidationThreads();
+            model.addAttribute("allErrors", allErrors);
+        }catch (Exception e){
+            log.error("Unable to generate validation report", e);
+        }
+        //return new ModelAndView(new RedirectView("validate.jsp"));
     }
 }
