@@ -13,10 +13,13 @@
  */
 package org.openmrs.module.validation.web.controller;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.validation.ValidationErrorEntry;
 import org.openmrs.module.validation.ValidationThread;
 import org.openmrs.module.validation.api.ValidationService;
 import org.openmrs.module.validation.utils.ValidationUtils;
@@ -90,17 +93,18 @@ public class ValidationController {
 
     @RequestMapping(value = "/module/validation/validate", params = "show_button", method = RequestMethod.POST)
     public void showReport(ModelMap model) throws Exception {
-        Map<Object, Exception> allErrors = new ConcurrentHashMap<Object, Exception>();
+        ListMultimap<String,Map<Object, Exception>> errorTypeValueMap = ArrayListMultimap.create();
         try{
 
             List<ValidationThread> runningThreads = getValidationService().getValidationThreads();
             for (ValidationThread thread : runningThreads){
                 Map<Object, Exception> errors = thread.getErrors();
-                allErrors.putAll(errors);
+                errorTypeValueMap.put(thread.getType(),errors);
             }
+            List<ValidationErrorEntry> errorEntries = ValidationUtils.prepareReportByClass(errorTypeValueMap);
             log.info("Combined all validation errors into one Map");
             getValidationService().removeAllValidationThreads();
-            model.addAttribute("allErrors", allErrors);
+            model.addAttribute("allErrors", errorEntries);
         }catch (Exception e){
             log.error("Unable to generate validation report", e);
         }
