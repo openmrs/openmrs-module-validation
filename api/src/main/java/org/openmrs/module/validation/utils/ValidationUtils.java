@@ -14,14 +14,18 @@
 
 package org.openmrs.module.validation.utils;
 
+import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.validation.ValidationErrorEntry;
 import org.springframework.validation.Validator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ValidationUtils {
 
@@ -77,4 +81,19 @@ public class ValidationUtils {
         return section;
     }
 
+    public static List<ValidationErrorEntry> prepareReportByClass(ListMultimap<String, Map<Object, Exception>> errorTypeValueMap) {
+        List<ValidationErrorEntry> errorEntries = new ArrayList<ValidationErrorEntry>();
+        for(String className: errorTypeValueMap.keySet()){
+            Map<Object, Exception> allErrorsOfSingleClass = new ConcurrentHashMap<Object, Exception>();
+            for(Map<Object, Exception> entryMap : errorTypeValueMap.get(className)){
+                allErrorsOfSingleClass.putAll(entryMap);
+            }
+            ValidationErrorEntry entry = new ValidationErrorEntry();
+            entry.setClassname(className);
+            entry.setErrors(allErrorsOfSingleClass);
+            errorEntries.add(entry);
+        }
+
+        return errorEntries;
+    }
 }

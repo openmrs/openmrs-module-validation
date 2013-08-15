@@ -22,7 +22,11 @@
 			<artifactId>library-name</artifactId>
 		</dependency>
 		-->
-
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>14.0</version>
+        </dependency>
 		
 		<dependency>
 			<groupId>org.openmrs.api</groupId>

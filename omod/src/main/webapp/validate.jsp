@@ -75,8 +75,8 @@
         <table id="classTable">
             <c:forEach items="${allErrors}" var="error">
                 <tr>
-                    <td>${error.key}</td>
-                    <td>${error.value}</td>
+                    <td>${error.classname}</td>
+                    <%--<td>${error.errors}</td>--%>
                 </tr>
             </c:forEach>
         </table>
@@ -86,8 +86,8 @@
         <table id="errorTable">
             <c:forEach items="${allErrors}" var="error">
                 <tr>
-                    <td>${error.value}</td>
-                    <td>${error.key}</td>
+                    <%--<td>${error.value}</td>--%>
+                    <td>${error.classname}</td>
                 </tr>
             </c:forEach>
         </table>
