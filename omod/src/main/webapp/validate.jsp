@@ -71,13 +71,18 @@
 
 <div id="errorSections">
     <div id="classView">
-        <div id="classTableHeader">Errors sorted on Class Type</div>
         <table id="classTable">
             <c:forEach items="${allErrors}" var="error">
-                <tr>
+                <tr id="classNameRow">
                     <td>${error.classname}</td>
-                    <%--<td>${error.errors}</td>--%>
                 </tr>
+                <c:forEach items="${error.errors}" var="mapEntry">
+                        <tr>
+                            <td>${mapEntry.key}</td>
+                            <td>${mapEntry.value}</td>
+                            <td><a href="#">Fix</a></td>
+                        </tr>
+                </c:forEach>
             </c:forEach>
         </table>
     </div>

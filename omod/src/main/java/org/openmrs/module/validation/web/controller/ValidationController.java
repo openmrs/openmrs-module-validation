@@ -99,7 +99,10 @@ public class ValidationController {
             List<ValidationThread> runningThreads = getValidationService().getValidationThreads();
             for (ValidationThread thread : runningThreads){
                 Map<Object, Exception> errors = thread.getErrors();
-                errorTypeValueMap.put(thread.getType(),errors);
+                if(!errors.isEmpty()){
+                    errorTypeValueMap.put(ValidationUtils.beautify(thread.getType()),errors);
+                }
+
             }
             List<ValidationErrorEntry> errorEntries = ValidationUtils.prepareReportByClass(errorTypeValueMap);
             log.info("Combined all validation errors into one Map");

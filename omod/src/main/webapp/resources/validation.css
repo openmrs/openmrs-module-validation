@@ -57,13 +57,12 @@ body {
     padding-bottom: 2px;
 }
 
-#classTableHeader,#errorTableHeader {
+#classNameRow,#errorTableHeader {
     background-color: #1AAC9B;
     color: white;
-    display: block;
-    padding: 2px;
+    padding-right: 2px;
+    padding-left: 2px;
 }
 table tr,td{
-    vertical-align: middle;
     border: 1px solid navy;
 }
