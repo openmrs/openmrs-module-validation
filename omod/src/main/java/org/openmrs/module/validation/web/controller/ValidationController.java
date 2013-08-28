@@ -112,7 +112,7 @@ public class ValidationController {
             List<ValidationErrorEntryByClass> errorEntriesByClass = ValidationUtils.prepareReportByClass(errorWithClassMap);
             List<ValidationErrorEntryByError> errorEntriesByError = ValidationUtils.prepareReportByError(errorWithTypeMap);
             log.info("Combined all validation errors into one Map");
-            getValidationService().removeAllValidationThreads();
+//            getValidationService().removeAllValidationThreads();
             model.addAttribute("allErrorsByClass", errorEntriesByClass);
             model.addAttribute("allErrorsByError", errorEntriesByError);
         }catch (Exception e){

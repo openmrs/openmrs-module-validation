@@ -15,6 +15,14 @@ package org.openmrs.module.validation;
 
 import org.apache.commons.collections.MultiMap;
 
+/**
+ * Define a error entry to be added into error view tab of the validation report
+ * The structure of the entry is like,e.g.
+ * <ErrorName>
+ * <ClassName 1>    ---> <Error 1 Description>
+ * <ClassName 2>    ---> <Error 2 Description>
+ *
+ */
 public class ValidationErrorEntryByError {
 
     private String errorname;

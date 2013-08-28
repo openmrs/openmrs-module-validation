@@ -15,14 +15,17 @@ package org.openmrs.module.validation;
 
 import java.util.Map;
 
+/**
+ * Define a error entry to be added into class view tab of the validation report
+ * The structure of the entry is like,e.g.
+ * <ClassName> ---> <Error 1 Description>
+ *                  <Error 2 Description>
+ *
+ */
 public class ValidationErrorEntryByClass {
 
     private String classname;
     private Map<Object, Exception> errors;
-
-    public ValidationErrorEntryByClass() {
-
-    }
 
     public String getClassname() {
         return classname;
