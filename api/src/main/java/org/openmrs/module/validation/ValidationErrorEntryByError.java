@@ -13,15 +13,12 @@
  */
 package org.openmrs.module.validation;
 
-
-import com.google.common.collect.ListMultimap;
-
-import java.util.Map;
+import org.apache.commons.collections.MultiMap;
 
 public class ValidationErrorEntryByError {
 
     private String errorname;
-    private ListMultimap<String, String> errorsDetail;
+    private MultiMap errorsDetail;
 
     public String getErrorname() {
         return errorname;
@@ -31,11 +28,11 @@ public class ValidationErrorEntryByError {
         this.errorname = errorname;
     }
 
-    public ListMultimap<String, String> getErrorsDetail() {
+    public MultiMap getErrorsDetail() {
         return errorsDetail;
     }
 
-    public void setErrorsDetail(ListMultimap<String, String> errorsDetail) {
+    public void setErrorsDetail(MultiMap errorsDetail) {
         this.errorsDetail = errorsDetail;
     }
 }

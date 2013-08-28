@@ -13,8 +13,8 @@
  */
 package org.openmrs.module.validation.web.controller;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
+import org.apache.commons.collections.MultiMap;
+import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -92,8 +92,8 @@ public class ValidationController {
 
     @RequestMapping(value = "/module/validation/validate", params = "show_button", method = RequestMethod.POST)
     public void showReport(ModelMap model) throws Exception {
-        ListMultimap<String,Map<Object, Exception>> errorWithClassMap = ArrayListMultimap.create();
-        ListMultimap<String, ListMultimap<String,String>> errorWithTypeMap = ArrayListMultimap.create();
+        MultiMap errorWithClassMap = new MultiValueMap();
+        MultiMap errorWithTypeMap = new MultiValueMap();
         ValidationErrorEntryByError entryByError;
         try{
 
