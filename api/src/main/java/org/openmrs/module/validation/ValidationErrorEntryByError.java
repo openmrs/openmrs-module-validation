@@ -13,32 +13,29 @@
  */
 package org.openmrs.module.validation;
 
+
+import com.google.common.collect.ListMultimap;
+
 import java.util.Map;
 
-public class ValidationErrorEntry {
+public class ValidationErrorEntryByError {
 
-    private String classname;
-    private Map<Object, Exception> errors;
+    private String errorname;
+    private ListMultimap<String, String> errorsDetail;
 
-    public ValidationErrorEntry() {
-
+    public String getErrorname() {
+        return errorname;
     }
 
-    public String getClassname() {
-        return classname;
+    public void setErrorname(String errorname) {
+        this.errorname = errorname;
     }
 
-    public void setClassname(String classname) {
-        this.classname = classname;
+    public ListMultimap<String, String> getErrorsDetail() {
+        return errorsDetail;
     }
 
-    public Map<Object, Exception> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(Map<Object, Exception> errors) {
-        this.errors = errors;
+    public void setErrorsDetail(ListMultimap<String, String> errorsDetail) {
+        this.errorsDetail = errorsDetail;
     }
 }
-
-

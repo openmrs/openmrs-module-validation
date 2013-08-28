@@ -72,28 +72,38 @@
 <div id="errorSections">
     <div id="classView">
         <table id="classTable">
-            <c:forEach items="${allErrors}" var="error">
+            <c:forEach items="${allErrorsByClass}" var="errorClass">
                 <tr id="classNameRow">
-                    <td>${error.classname}</td>
+                    <td>${errorClass.classname}</td>
                 </tr>
-                <c:forEach items="${error.errors}" var="mapEntry">
+                <c:forEach items="${errorClass.errors}" var="mapEntry">
                         <tr>
                             <td>${mapEntry.key}</td>
                             <td>${mapEntry.value}</td>
-                            <td><a href="#">Fix</a></td>
+                            <td width="10%"><a href="#">Fix</a></td>
                         </tr>
                 </c:forEach>
             </c:forEach>
         </table>
     </div>
-    <div id="errorView" style="display:none;">
-        <div id="errorTableHeader">Errors sorted on Error Type</div>
+    <div id="errorView">
         <table id="errorTable">
-            <c:forEach items="${allErrors}" var="error">
-                <tr>
-                    <%--<td>${error.value}</td>--%>
-                    <td>${error.classname}</td>
+            <c:forEach items="${allErrorsByError}" var="error">
+                <tr id="errorNameRow">
+                    <td>${error.errorname}</td>
                 </tr>
+                <c:forEach items="${error.errorsDetail}" var="errorEntry">
+                    <tr>
+                        <td>${errorEntry.key}</td>
+                        <td></td>
+                    </tr>
+                        <c:forEach items="${errorEntry.value}" var="errorDes">
+                            <tr>
+                                <td></td>
+                                <td>${errorDes}</td>
+                            </tr>
+                        </c:forEach>
+                </c:forEach>
             </c:forEach>
         </table>
     </div>
