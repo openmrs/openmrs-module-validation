@@ -14,17 +14,17 @@
 
 package org.openmrs.module.validation.utils;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.validation.ValidationErrorEntry;
+import org.openmrs.module.validation.ValidationErrorEntryByClass;
+import org.openmrs.module.validation.ValidationErrorEntryByError;
 import org.springframework.validation.Validator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ValidationUtils {
@@ -81,19 +81,44 @@ public class ValidationUtils {
         return section;
     }
 
-    public static List<ValidationErrorEntry> prepareReportByClass(ListMultimap<String, Map<Object, Exception>> errorTypeValueMap) {
-        List<ValidationErrorEntry> errorEntries = new ArrayList<ValidationErrorEntry>();
+    public static List<ValidationErrorEntryByClass> prepareReportByClass(ListMultimap<String, Map<Object, Exception>> errorTypeValueMap) {
+        List<ValidationErrorEntryByClass> errorEntries = new ArrayList<ValidationErrorEntryByClass>();
         for(String className: errorTypeValueMap.keySet()){
             Map<Object, Exception> allErrorsOfSingleClass = new ConcurrentHashMap<Object, Exception>();
             for(Map<Object, Exception> entryMap : errorTypeValueMap.get(className)){
                 allErrorsOfSingleClass.putAll(entryMap);
             }
-            ValidationErrorEntry entry = new ValidationErrorEntry();
-            entry.setClassname(className);
-            entry.setErrors(allErrorsOfSingleClass);
-            errorEntries.add(entry);
+            ValidationErrorEntryByClass entryByClass = new ValidationErrorEntryByClass();
+            entryByClass.setClassname(className);
+            entryByClass.setErrors(allErrorsOfSingleClass);
+            errorEntries.add(entryByClass);
         }
 
+        return errorEntries;
+    }
+
+    public static ValidationErrorEntryByError prepareEntryByError(Exception exception, String type) {
+        ValidationErrorEntryByError entry = new ValidationErrorEntryByError();
+        ListMultimap<String,String> entryVal = ArrayListMultimap.create();
+           entryVal.put(ValidationUtils.beautify(type),exception.getMessage());
+            entry.setErrorname(exception.getClass().getName());
+            entry.setErrorsDetail(entryVal);
+
+        return entry ;
+    }
+
+    public static List<ValidationErrorEntryByError> prepareReportByError(ListMultimap<String, ListMultimap<String, String>> errorWithTypeMap) {
+        List<ValidationErrorEntryByError> errorEntries = new ArrayList<ValidationErrorEntryByError>();
+        for(String errorName: errorWithTypeMap.keySet()){
+            ListMultimap<String, String> allInfoOfSingleError = ArrayListMultimap.create();
+            for(ListMultimap<String, String> entryMap : errorWithTypeMap.get(errorName)){
+                allInfoOfSingleError.putAll(entryMap);
+            }
+            ValidationErrorEntryByError entryByError = new ValidationErrorEntryByError();
+            entryByError.setErrorname(errorName);
+            entryByError.setErrorsDetail(allInfoOfSingleError);
+            errorEntries.add(entryByError);
+        }
         return errorEntries;
     }
 }
