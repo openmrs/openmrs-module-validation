@@ -106,7 +106,6 @@ public class ValidationServiceImpl implements ValidationService {
 	/**
 	 * @see org.openmrs.module.validation.api.ValidationService#validate(java.lang.String, long,
 	 *      long, java.util.Map)
-     * @should verify validation is completed
      *
 	 */
 	public void validate(String type, long firstObject, long maxObjects, Map<Object, Exception> errors) {
@@ -144,9 +143,9 @@ public class ValidationServiceImpl implements ValidationService {
 	}
 
     /**
-     * @see org.openmrs.module.validation.api.ValidationService#removeAllValidationThreads()
+     * @see org.openmrs.module.validation.api.ValidationService#stopAllValidationThreads()
      */
-    public void removeAllValidationThreads() {
+    public void stopAllValidationThreads() {
         for (ValidationThread thread : validationThreads){
             thread.interrupt();
         }
