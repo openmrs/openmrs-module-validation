@@ -48,17 +48,6 @@ import java.util.concurrent.ConcurrentHashMap;
         }
     }
 
-    /**
-     * @verifies verify validation is completed
-     * @see org.openmrs.module.validation.api.impl.ValidationServiceImpl#validate(String, long, long, java.util.Map)
-     */
-    @Test
-    public void validate_shouldVerifyValidationIsCompleted() throws Exception {
-        String objectType = "org.openmrs.Concept";
-        Map<Object, Exception> errors = new ConcurrentHashMap<Object, Exception>();
-        validationService.validate(objectType, 0, 200, errors);
-        //Assert.assertTrue(!errors.isEmpty());
-    }
 
     /**
      * @verifies verify thread count is not 0
