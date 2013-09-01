@@ -57,7 +57,7 @@ body {
     padding-bottom: 2px;
 }
 
-#classNameRow,#errorTableHeader {
+#classNameRow,#errorNameRow {
     background-color: #1AAC9B;
     color: white;
     padding-right: 2px;
@@ -66,3 +66,4 @@ body {
 table tr,td{
     border: 1px solid navy;
 }
+
