@@ -13,10 +13,15 @@
  */
 package org.openmrs.module.validation.web.controller;
 
+import org.apache.commons.collections.MultiMap;
+import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.validation.ValidationErrorEntryByClass;
+import org.openmrs.module.validation.ValidationErrorEntryByError;
+import org.openmrs.module.validation.ValidationThread;
 import org.openmrs.module.validation.api.ValidationService;
 import org.openmrs.module.validation.utils.ValidationUtils;
 import org.openmrs.web.WebConstants;
@@ -30,7 +35,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The main controller.
@@ -50,7 +56,7 @@ public class ValidationController {
 	}
 	
 	@RequestMapping(value = "/module/validation/validate", params = "validate_button" , method = RequestMethod.POST)
-    public ModelAndView validate(@RequestParam("types") String types, HttpServletRequest request, ModelMap model) {
+    public String validate(@RequestParam("types") String types, HttpServletRequest request, ModelMap model) {
         HttpSession httpSession = request.getSession();
         String[] obtypes = ValidationUtils.getListOfObjectsToValidate(types);
 		try {
@@ -67,20 +73,52 @@ public class ValidationController {
 		catch (Exception e) {
 			log.error("Unable to start validation", e);
 		}
-		return new ModelAndView(new RedirectView("list.form"));
+        return "redirect:list.form";
 	}
 
     @RequestMapping(value = "/module/validation/validate", params = "stop_button", method = RequestMethod.POST)
-    public ModelAndView stopValidation(HttpServletRequest request) throws Exception {
+    public String stopValidation(HttpServletRequest request) throws Exception {
         try{
             HttpSession httpSession = request.getSession();
-            getValidationService().removeAllValidationThreads();
+            getValidationService().stopAllValidationThreads();
             log.info("Stopped the currently running validation process ");
             httpSession.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "validation.stopped");
         }catch (Exception e){
             log.error("Unable to stop validation", e);
         }
 
-        return new ModelAndView(new RedirectView("list.form"));
+        return "redirect:list.form";
+
+    }
+
+    @RequestMapping(value = "/module/validation/validate", params = "show_button", method = RequestMethod.POST)
+    public void showReport(ModelMap model) throws Exception {
+        MultiMap errorWithClassMap = new MultiValueMap();
+        MultiMap errorWithTypeMap = new MultiValueMap();
+        ValidationErrorEntryByError entryByError;
+        try{
+
+            List<ValidationThread> runningThreads = getValidationService().getValidationThreads();
+            for (ValidationThread thread : runningThreads){
+                Map<Object, Exception> errors = thread.getErrors();
+                if(!errors.isEmpty()){
+                    errorWithClassMap.put(ValidationUtils.beautify(thread.getType()), errors);
+                    for(Exception exception: errors.values()){
+                        entryByError = ValidationUtils.prepareEntryByError(exception, thread.getType());
+                        errorWithTypeMap.put(entryByError.getErrorname(),entryByError.getErrorsDetail());
+                    }
+                }
+
+            }
+            List<ValidationErrorEntryByClass> errorEntriesByClass = ValidationUtils.prepareReportByClass(errorWithClassMap);
+            List<ValidationErrorEntryByError> errorEntriesByError = ValidationUtils.prepareReportByError(errorWithTypeMap);
+            log.info("Combined all validation errors into one Map");
+//            getValidationService().stopAllValidationThreads();
+            model.addAttribute("allErrorsByClass", errorEntriesByClass);
+            model.addAttribute("allErrorsByError", errorEntriesByError);
+        }catch (Exception e){
+            log.error("Unable to generate validation report", e);
+        }
+
     }
 }

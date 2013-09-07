@@ -1,0 +1,69 @@
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    font-size: 12px;
+}
+
+#errorTabs {
+    font-size: 0.8em;
+    margin: 10px auto 7px auto;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #1AAC9B;
+    width: 99%;
+}
+
+#errorTabs ul, #errorTabs li {
+    display: inline;
+    list-style-type: none;
+    padding: 0px 0px 0px 0px;
+}
+
+#errorTabs a:link, #errorTabs a:visited {
+    border: 1px solid navy;
+    font-size: small;
+    font-weight: bold;
+    margin-right: 8px;
+    padding: 2px 10px 2px 10px;
+    text-decoration: none;
+    color: navy;
+    background: #E0E0F0;
+}
+#errorTabs a:link.active, #errorTabs a:visited.active {
+    border-bottom: 1px solid #1AAC9B;
+}
+#errorTabs a.current, #errorTabs a:link.current, #errorTabs a:visited.current, #errorTabs a.current:hover {
+    background: #FFFFFF;
+    border-bottom: 1px solid #1AAC9B;
+    color: navy;
+    text-decoration: none;
+}
+#errorTabs a:hover {
+    text-decoration: underline;
+}
+
+#classTable,#errorTable {
+    margin-top: 5px;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-bottom: 2px;
+}
+
+#classNameRow,#errorNameRow {
+    background-color: #1AAC9B;
+    color: white;
+    padding-right: 2px;
+    padding-left: 2px;
+}
+table tr,td{
+    border: 1px solid navy;
+}
+

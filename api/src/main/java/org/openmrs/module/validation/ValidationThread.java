@@ -39,7 +39,7 @@ public class ValidationThread extends Thread {
 	
 	private volatile long objectsLeftToProcess;
 
-    private boolean isDead;
+    private static boolean active = true;
 
 	
 	public ValidationThread(String type, long startFrom, long totalObjects, UserContext userContext) {
@@ -86,12 +86,16 @@ public class ValidationThread extends Thread {
 		return errors;
 	}
 
-    public boolean isDead() {
-        return isDead;
+    public boolean isActive() {
+        return ValidationThread.active;
     }
 
-    public void setDead(boolean dead) {
-        isDead = dead;
+    private void setActive(boolean active) {
+        ValidationThread.active = active;
+    }
+
+    public void deactivateThread(boolean active){
+        setActive(!active);
     }
 
     /**
@@ -101,18 +105,24 @@ public class ValidationThread extends Thread {
 		Context.setUserContext(userContext);
 		
 		long currentPosition = startFrom;
-		while (objectsLeftToProcess > 0 && !isInterrupted()) {
-			Context.getService(ValidationService.class).validate(type, currentPosition, BATCH_SIZE, errors);
-			
-			currentPosition += BATCH_SIZE;
-			
-			if (objectsLeftToProcess - BATCH_SIZE > 0) {
-				objectsLeftToProcess -= BATCH_SIZE;
-			} else {
-				objectsLeftToProcess = 0;
-			}
-		}
-        isDead = true;
+        try{
+            while (objectsLeftToProcess > 0 && !isInterrupted()) {
+                Context.getService(ValidationService.class).validate(type, currentPosition, BATCH_SIZE, errors);
+
+                currentPosition += BATCH_SIZE;
+
+                if (objectsLeftToProcess - BATCH_SIZE > 0) {
+                    objectsLeftToProcess -= BATCH_SIZE;
+                } else {
+                    objectsLeftToProcess = 0;
+                }
+            }
+        } finally {
+            deactivateThread(true);
+//            System.out.println("Thread is dead: " + this.isActive());
+        }
+
+
 	}
 	
 }
