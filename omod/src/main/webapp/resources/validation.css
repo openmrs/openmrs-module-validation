@@ -1,5 +1,4 @@
 html {
-    height: 100%;
     width: 100%;
 }
 
@@ -63,6 +62,12 @@ body {
     padding-right: 2px;
     padding-left: 2px;
 }
+
+#errorKeyRow {
+    background-color: #F7F95D;
+    color: black;
+}
+
 table tr,td{
     border: 1px solid navy;
 }

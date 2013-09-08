@@ -17,6 +17,8 @@ package org.openmrs.module.validation.utils;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.commons.lang.StringUtils;
+import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.OpenmrsMetadata;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.validation.ValidationErrorEntryByClass;
@@ -82,11 +84,19 @@ public class ValidationUtils {
     public static List<ValidationErrorEntryByClass> prepareReportByClass(MultiMap errorTypeValueMap) {
         List<ValidationErrorEntryByClass> errorEntries = new ArrayList<ValidationErrorEntryByClass>();
         for(Object className: errorTypeValueMap.keySet()){
-            Map<Object, Exception> allErrorsOfSingleClass = new HashMap<Object, Exception>();
+            Map<String, Exception> allErrorsOfSingleClass = new HashMap<String, Exception>();
             List<Map<Object, Exception>> entries = (List<Map<Object, Exception>>) errorTypeValueMap.get(className);
+
             for(Map<Object, Exception> entryMap : entries){
-                allErrorsOfSingleClass.putAll(entryMap);
+                for(Object obj :entryMap.keySet() ){
+//                    Here we get the Id and UUID of the object and display it as the key
+                    BaseOpenmrsObject openmrsObject = (BaseOpenmrsObject) obj;
+                    String errorIdUuid = openmrsObject.getId() + ": " + openmrsObject.getUuid();
+                    allErrorsOfSingleClass.put(errorIdUuid,entryMap.get(obj));
+                }
+
             }
+
             ValidationErrorEntryByClass entryByClass = new ValidationErrorEntryByClass();
             entryByClass.setClassname((String) className);
             entryByClass.setErrors(allErrorsOfSingleClass);

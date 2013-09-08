@@ -25,7 +25,7 @@ import java.util.Map;
 public class ValidationErrorEntryByClass {
 
     private String classname;
-    private Map<Object, Exception> errors;
+    private Map<String, Exception> errors;
 
     public String getClassname() {
         return classname;
@@ -35,11 +35,11 @@ public class ValidationErrorEntryByClass {
         this.classname = classname;
     }
 
-    public Map<Object, Exception> getErrors() {
+    public Map<String, Exception> getErrors() {
         return errors;
     }
 
-    public void setErrors(Map<Object, Exception> errors) {
+    public void setErrors(Map<String, Exception> errors) {
         this.errors = errors;
     }
 }
