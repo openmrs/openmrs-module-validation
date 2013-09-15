@@ -32,13 +32,13 @@
                 </tr>
                 <c:forEach items="${errorClass.errors}" var="mapEntry">
                         <tr>
-                            <td>${mapEntry.key}</td>
+                            <td width="25%">${mapEntry.key}</td>
                             <td>${mapEntry.value}</td>
                             <c:if test="${errorClass.classname == 'Concept'}">
                                 <c:set var="conceptIds" value="${fn:split(mapEntry.key, ':')}" />
                                 <td><button type="button" name="fix_button" id="fix_button_${conceptIds[0]}"><spring:message code="validation.fix"/></button></td>
-                                <div id="dialog_${conceptIds[0]}">
-                                    <iframe src ="/openmrs/dictionary/concept.form?conceptId=${conceptIds[0]}" height="800" width="1450">
+                                <div id="dialog_${conceptIds[0]}" style="overflow: hidden">
+                                    <iframe src="/openmrs/dictionary/concept.form?conceptId=${conceptIds[0]}" scrolling="no" style="height:800px; border:0px none; width:1200px; margin-top:-90px;">
                                         <p>Your browser does not support Iframes.</p>
                                     </iframe>
                                 </div>
@@ -91,8 +91,8 @@
     /* This dialog window is used to keep the edit concept page for each concept that has errors*/
     jQuery("div[id^='dialog_']").dialog({
         autoOpen:false,
-        height:950,
-        width:1500,
+        height:800,
+        width:1200,
         buttons:{
             "Done":function () {
                 jQuery(this).dialog("close");

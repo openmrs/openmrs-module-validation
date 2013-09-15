@@ -57,6 +57,10 @@ public class ValidationController {
 	
 	@RequestMapping(value = "/module/validation/validate", params = "validate_button" , method = RequestMethod.POST)
     public String validate(@RequestParam("types") String types, HttpServletRequest request, ModelMap model) {
+
+//      We first need to removed all validation threads which remains from last time run
+        getValidationService().stopAllValidationThreads();
+
         HttpSession httpSession = request.getSession();
         String[] obtypes = ValidationUtils.getListOfObjectsToValidate(types);
 		try {
