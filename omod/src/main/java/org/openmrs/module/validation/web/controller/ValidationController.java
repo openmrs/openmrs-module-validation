@@ -107,8 +107,12 @@ public class ValidationController {
                 Map<Object, Exception> errors = thread.getErrors();
                 if(!errors.isEmpty()){
                     errorWithClassMap.put(ValidationUtils.beautify(thread.getType()), errors);
-                    for(Exception exception: errors.values()){
+                    /*for(Exception exception: errors.values()){
                         entryByError = ValidationUtils.prepareEntryByError(exception, thread.getType());
+                        errorWithTypeMap.put(entryByError.getErrorname(),entryByError.getErrorsDetail());
+                    }*/
+                    for(Object object: errors.keySet()){
+                        entryByError = ValidationUtils.prepareEntryByError(object,errors.get(object), thread.getType());
                         errorWithTypeMap.put(entryByError.getErrorname(),entryByError.getErrorsDetail());
                     }
                 }

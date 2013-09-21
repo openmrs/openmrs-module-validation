@@ -27,7 +27,7 @@ body {
 }
 
 #errorTabs a:link, #errorTabs a:visited {
-    border: 1px solid navy;
+    /*border: 1px solid navy;*/
     font-size: small;
     font-weight: bold;
     margin-right: 8px;
@@ -63,12 +63,7 @@ body {
     padding-left: 2px;
 }
 
-#errorKeyRow {
-    background-color: #F7F95D;
-    color: black;
-}
-
-table tr,td{
+/*#classTable #errorTable tr,td{
     border: 1px solid navy;
-}
+}*/
 

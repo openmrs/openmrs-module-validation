@@ -30,13 +30,14 @@
                 <tr id="classNameRow">
                     <td>${errorClass.classname}</td>
                 </tr>
+
                 <c:forEach items="${errorClass.errors}" var="mapEntry">
-                        <tr>
-                            <td width="25%">${mapEntry.key}</td>
-                            <td>${mapEntry.value}</td>
+                        <tr style="border:1px solid navy">
+                            <td width="25%" style="border:1px solid navy">${mapEntry.key}</td>
+                            <td style="border:1px solid navy">${mapEntry.value}</td>
                             <c:if test="${errorClass.classname == 'Concept'}">
                                 <c:set var="conceptIds" value="${fn:split(mapEntry.key, ':')}" />
-                                <td><button type="button" name="fix_button" id="fix_button_${conceptIds[0]}"><spring:message code="validation.fix"/></button></td>
+                                <td style="border:1px solid navy"><button type="button" name="fix_button" id="fix_button_${conceptIds[0]}"><spring:message code="validation.fix"/></button></td>
                                 <div id="dialog_${conceptIds[0]}" style="overflow: hidden">
                                     <iframe src="/openmrs/dictionary/concept.form?conceptId=${conceptIds[0]}" scrolling="no" style="height:800px; border:0px none; width:1200px; margin-top:-90px;">
                                         <p>Your browser does not support Iframes.</p>
@@ -55,15 +56,10 @@
                     <td>${error.errorname}</td>
                 </tr>
                 <c:forEach items="${error.errorsDetail}" var="errorEntry">
-                    <tr  id="errorKeyRow">
-                        <td>${errorEntry.key}</td>
+                    <tr id="errorKeyRow" style="border:1px solid navy">
+                        <td width="25%" style="border:1px solid navy">${errorEntry.key}</td>
+                        <td width="75%" style="border:1px solid navy">${errorEntry.value}</td>
                     </tr>
-                        <c:forEach items="${errorEntry.value}" var="errorDes">
-                            <tr>
-                                <td></td>
-                                <td>${errorDes}</td>
-                            </tr>
-                        </c:forEach>
                 </c:forEach>
             </c:forEach>
         </table>

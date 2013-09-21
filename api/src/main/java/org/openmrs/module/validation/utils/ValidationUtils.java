@@ -106,10 +106,12 @@ public class ValidationUtils {
         return errorEntries;
     }
 
-    public static ValidationErrorEntryByError prepareEntryByError(Exception exception, String type) {
+    public static ValidationErrorEntryByError prepareEntryByError(Object object , Exception exception, String type) {
         ValidationErrorEntryByError entry = new ValidationErrorEntryByError();
+        BaseOpenmrsObject openmrsObject = (BaseOpenmrsObject) object;
+        String errorIdUuid = openmrsObject.getId() + ": " + openmrsObject.getUuid();
         MultiMap entryVal = new MultiValueMap();
-           entryVal.put(ValidationUtils.beautify(type),exception.getMessage());
+           entryVal.put(errorIdUuid,exception.getMessage());
             entry.setErrorname(exception.getClass().getName());
             entry.setErrorsDetail(entryVal);
 
