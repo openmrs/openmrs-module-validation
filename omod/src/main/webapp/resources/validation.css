@@ -1,5 +1,4 @@
 html {
-    height: 100%;
     width: 100%;
 }
 
@@ -28,7 +27,7 @@ body {
 }
 
 #errorTabs a:link, #errorTabs a:visited {
-    border: 1px solid navy;
+    /*border: 1px solid navy;*/
     font-size: small;
     font-weight: bold;
     margin-right: 8px;
@@ -63,7 +62,8 @@ body {
     padding-right: 2px;
     padding-left: 2px;
 }
-table tr,td{
+
+/*#classTable #errorTable tr,td{
     border: 1px solid navy;
-}
+}*/
 
