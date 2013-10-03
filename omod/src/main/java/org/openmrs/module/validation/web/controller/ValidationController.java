@@ -57,6 +57,10 @@ public class ValidationController {
 	
 	@RequestMapping(value = "/module/validation/validate", params = "validate_button" , method = RequestMethod.POST)
     public String validate(@RequestParam("types") String types, HttpServletRequest request, ModelMap model) {
+
+//      We first need to removed all validation threads which remains from last time run
+        getValidationService().stopAllValidationThreads();
+
         HttpSession httpSession = request.getSession();
         String[] obtypes = ValidationUtils.getListOfObjectsToValidate(types);
 		try {
@@ -103,8 +107,12 @@ public class ValidationController {
                 Map<Object, Exception> errors = thread.getErrors();
                 if(!errors.isEmpty()){
                     errorWithClassMap.put(ValidationUtils.beautify(thread.getType()), errors);
-                    for(Exception exception: errors.values()){
+                    /*for(Exception exception: errors.values()){
                         entryByError = ValidationUtils.prepareEntryByError(exception, thread.getType());
+                        errorWithTypeMap.put(entryByError.getErrorname(),entryByError.getErrorsDetail());
+                    }*/
+                    for(Object object: errors.keySet()){
+                        entryByError = ValidationUtils.prepareEntryByError(object,errors.get(object), thread.getType());
                         errorWithTypeMap.put(entryByError.getErrorname(),entryByError.getErrorsDetail());
                     }
                 }
@@ -113,7 +121,6 @@ public class ValidationController {
             List<ValidationErrorEntryByClass> errorEntriesByClass = ValidationUtils.prepareReportByClass(errorWithClassMap);
             List<ValidationErrorEntryByError> errorEntriesByError = ValidationUtils.prepareReportByError(errorWithTypeMap);
             log.info("Combined all validation errors into one Map");
-//            getValidationService().stopAllValidationThreads();
             model.addAttribute("allErrorsByClass", errorEntriesByClass);
             model.addAttribute("allErrorsByError", errorEntriesByError);
         }catch (Exception e){

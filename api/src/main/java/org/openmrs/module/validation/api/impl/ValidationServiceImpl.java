@@ -38,6 +38,8 @@ public class ValidationServiceImpl implements ValidationService {
 	private SessionFactory sessionFactory;
 	
 	private List<ValidationThread> validationThreads = new CopyOnWriteArrayList<ValidationThread>();
+
+    private final static int BATCH_SIZE = 200;
 	
 	/**
 	 * @param sessionFactory the sessionFactory to set
@@ -86,21 +88,20 @@ public class ValidationServiceImpl implements ValidationService {
 	 */
 	public void startNewValidationThread(String type) {
 		Object result = sessionFactory.getCurrentSession().createCriteria(type).setProjection(Projections.rowCount()).uniqueResult();
-		
 		Long totalObjects = ((Number) result).longValue();
-
+        long currentPosition = 0;
 		Long partition = 0L;
 		if (totalObjects > 0) {
-			partition = (totalObjects) / 10;
+			partition = (totalObjects) / 200;
 		}
-		
-		for (long i = 0; i < totalObjects; i += partition + 1) {
-			ValidationThread validationThread = new ValidationThread(type, i, partition, Context.getUserContext());
-			validationThread.start();
-			
-			validationThreads.add(validationThread);
-		}
-		
+
+        // here we handover a batch of 200 or less (if totalObjects<200) objects for a single thread to validate
+        for (long i = 0; i <= partition; i ++) {
+            ValidationThread validationThread = new ValidationThread(type, currentPosition, BATCH_SIZE, Context.getUserContext());
+            validationThread.start();
+            currentPosition += BATCH_SIZE;
+            validationThreads.add(validationThread);
+        }
 	}
 	
 	/**
