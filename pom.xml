@@ -62,9 +62,7 @@
 				<type>jar</type>
 				<scope>test</scope>
 			</dependency>
-			
-						
-			
+
 		</dependencies>
 	</dependencyManagement>
 	

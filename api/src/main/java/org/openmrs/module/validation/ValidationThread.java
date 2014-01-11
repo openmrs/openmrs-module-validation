@@ -16,6 +16,8 @@ package org.openmrs.module.validation;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.UserContext;
 import org.openmrs.module.validation.api.ValidationService;
@@ -24,31 +26,57 @@ import org.openmrs.module.validation.api.ValidationService;
  * Represents a validation thread.
  */
 public class ValidationThread extends Thread {
-	
-	private final static int BATCH_SIZE = 200;
-	
+
 	private final UserContext userContext;
 	
 	private final String type;
 	
-	private final long totalObjects;
+	private long totalObjects ;
+
+    private int batchSize;
 	
 	private final long startFrom;
 	
 	private final Map<Object, Exception> errors;
 	
 	private volatile long objectsLeftToProcess;
-	
+
+    private static boolean active = true;
+
+    protected final Log log = LogFactory.getLog(getClass());
+
+    public ValidationThread(String type, long startFrom, int batchSize, UserContext userContext) {
+        this.userContext = userContext;
+        this.type = type;
+        this.startFrom = startFrom;
+        this.batchSize=batchSize;
+        errors = new ConcurrentHashMap<Object, Exception>();
+
+    }
+
+    @Deprecated
 	public ValidationThread(String type, long startFrom, long totalObjects, UserContext userContext) {
-		this.userContext = userContext;
+        this.totalObjects = totalObjects;
+        this.userContext = userContext;
 		this.type = type;
-		this.totalObjects = totalObjects;
 		this.startFrom = startFrom;
 		this.objectsLeftToProcess = totalObjects;
 		errors = new ConcurrentHashMap<Object, Exception>();
 	}
-	
-	/**
+
+    /**
+     *
+     * @return  batch size of an object set to process at once
+     */
+    public int getBatchSize() {
+        return batchSize;
+    }
+
+    public void setBatchSize(int batchSize) {
+        this.batchSize = batchSize;
+    }
+
+    /**
 	 * @return the totalObjects
 	 */
 	public long getTotalObjects() {
@@ -82,25 +110,32 @@ public class ValidationThread extends Thread {
 	public Map<Object, Exception> getErrors() {
 		return errors;
 	}
-	
-	/**
+
+    public boolean isActive() {
+        return ValidationThread.active;
+    }
+
+    private void setActive(boolean active) {
+        ValidationThread.active = active;
+    }
+
+    public void deactivateThread(boolean active){
+        setActive(!active);
+    }
+
+    /**
 	 * @see java.lang.Runnable#run()
 	 */
-	public void run() {
-		Context.setUserContext(userContext);
-		
-		long currentPosition = startFrom;
-		while (objectsLeftToProcess > 0 && !isInterrupted()) {
-			Context.getService(ValidationService.class).validate(type, currentPosition, BATCH_SIZE, errors);
-			
-			currentPosition += BATCH_SIZE;
-			
-			if (objectsLeftToProcess - BATCH_SIZE > 0) {
-				objectsLeftToProcess -= BATCH_SIZE;
-			} else {
-				objectsLeftToProcess = 0;
-			}
-		}
-	}
+    public void run() {
+        Context.setUserContext(userContext);
+        long currentPosition = startFrom;
+        try {
+            Context.getService(ValidationService.class).validate(type, currentPosition, batchSize, errors);
+        } catch (Exception ex) {
+            log.error("Error occured in running validation thread ", ex);
+        } finally {
+            deactivateThread(true);
+        }
+    }
 	
 }
