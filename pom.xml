@@ -1,43 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>validation</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Validation</name>
-	
+	<description>A module which allows to validate data and metadata in your system.</description>
+
 	<url>https://wiki.openmrs.org/x/CwDeAQ</url>
 
 	<scm>
 		<connection>scm:git:https://github.com/openmrs/openmrs-module-validation/</connection>
 		<developerConnection>scm:git:https://github.com/openmrs/openmrs-module-validation/</developerConnection>
 		<url>scm:git:https://github.com/openmrs/openmrs-module-validation/</url>
+		<tag>HEAD</tag>
 	</scm>
 
+	<distributionManagement>
+		<repository>
+			<id>openmrs-repo-modules</id>
+			<name>OpenMRS Modules</name>
+			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/modules</url>
+		</repository>
+		<snapshotRepository>
+			<id>openmrs-repo-snapshots</id>
+			<name>OpenMRS Snapshots</name>
+			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<modules>
 		<module>api</module>
 		<module>omod</module>
 	</modules>
 
-    
-	
+
+
 	<dependencyManagement>
 		<dependencies>
-			<!--
-			Libraries from lib to add as dependencies with compile or runtime scope:
-			Find matching dependencies in maven central repository.
-			<dependency>
-				<groupId>org.other.library</groupId>
-				<artifactId>library-name</artifactId>
-				<version>library.version</version>
-				<scope>compile</scope>
-			</dependency>
-			-->
-			
-						
+			<!-- Libraries from lib to add as dependencies with compile or runtime 
+				scope: Find matching dependencies in maven central repository. <dependency> 
+				<groupId>org.other.library</groupId> <artifactId>library-name</artifactId> 
+				<version>library.version</version> <scope>compile</scope> </dependency> -->
+
+
 			<dependency>
 				<groupId>org.openmrs.api</groupId>
 				<artifactId>openmrs-api</artifactId>
@@ -45,7 +54,7 @@
 				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.openmrs.web</groupId>
 				<artifactId>openmrs-web</artifactId>
@@ -53,8 +62,8 @@
 				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
-			
-						
+
+
 			<dependency>
 				<groupId>org.openmrs.test</groupId>
 				<artifactId>openmrs-test</artifactId>
@@ -62,14 +71,14 @@
 				<type>jar</type>
 				<scope>test</scope>
 			</dependency>
-			
-						
-			
+
+
+
 		</dependencies>
 	</dependencyManagement>
-	
-	
-    
+
+
+
 	<properties>
 		<openMRSVersion>1.7.0</openMRSVersion>
 	</properties>
@@ -113,5 +122,4 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-	<description>A module which allows to validate data and metadata in your system.</description>
 </project>
