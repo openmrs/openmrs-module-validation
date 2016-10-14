@@ -18,6 +18,8 @@
 	</c:forEach>
 </ol>
 
+<p><a href="remove_all.form">Remove all reports</a></p>
+
 <form method="post" action="validate.form">
 	<p>
 		Enter type to validate: <input type="text" name="type"

@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
+
 /**
  * The main controller.
  */
@@ -67,4 +69,16 @@ public class ValidationController {
 		
 		return new ModelAndView(new RedirectView("list.form"));
 	}
+
+    @RequestMapping(value = "/module/validation/remove_all", method = RequestMethod.GET)
+    public ModelAndView removeAllFromList() {
+        synchronized (this){
+            List<ValidationThread> threadList = getValidationService().getValidationThreads();
+            for(int i = threadList.size(); i > 0; i--){
+                getValidationService().removeValidationThread(i-1);
+            }
+        }
+
+        return new ModelAndView(new RedirectView("list.form"));
+    }
 }
