@@ -13,12 +13,12 @@
  */
 package org.openmrs.module.validation.api;
 
-import java.util.List;
-import java.util.Map;
-
 import org.openmrs.annotation.Authorized;
 import org.openmrs.module.validation.ValidationThread;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Allows to manage validation threads.
@@ -30,14 +30,21 @@ public interface ValidationService {
 	@Authorized("Validate Objects")
 	@Transactional(readOnly = true)
 	void validate(String type, long firstObject, long maxObjects, Map<Object, Exception> errors);
-	
+
+    @Authorized("Validate Objects")
+    @Transactional(readOnly = true)
+    void startNewValidationThread(String type, Long firstObject, Long maxObjects);
+
 	@Authorized("Validate Objects")
 	@Transactional(readOnly = true)
-	void startNewValidationThread(String type, Long firstObject, Long maxObjects);
+	void startNewValidationThread(String type);
 	
 	@Authorized("Validate Objects")
 	List<ValidationThread> getValidationThreads();
 	
 	@Authorized("Validate Objects")
 	void removeValidationThread(int index);
+
+    @Authorized("Validate Objects")
+    void stopAllValidationThreads();
 }
