@@ -19,12 +19,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Activator;
+import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.validation.api.ValidationService;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
  */
-public class ValidationActivator implements Activator {
+public class ValidationActivator extends BaseModuleActivator {
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	
