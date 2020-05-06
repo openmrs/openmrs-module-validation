@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<module configVersion="1.2">
+<module configVersion="1.3">
 	
     <!-- Module Properties -->
-	<id>validation</id>
-	<name>Validation Module</name>
-	<version>1.0.1</version>
-	<package>org.openmrs.module.validation</package>
+	<id>@MODULE_ID@</id>
+	<name>@MODULE_NAME@</name>
+	<version>@MODULE_VERSION@</version>
+	<package>@MODULE_PACKAGE@</package>
 	<author>Rafal Korytkowski</author>
 	<description>
 			A module which allows to validate data and metadata in your system.
@@ -14,7 +14,11 @@
 	
 	<!-- / Module Properties -->
 	
-	<require_version>1.6</require_version>
+	<require_version>${openMRSVersion}</require_version>
+
+	<aware_of_modules>
+		<aware_of_module>org.openmrs.module.legacyui</aware_of_module>
+	</aware_of_modules>
 
 	<!-- Required Privileges -->
 	<privilege>

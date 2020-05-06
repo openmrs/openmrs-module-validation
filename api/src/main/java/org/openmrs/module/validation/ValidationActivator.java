@@ -13,14 +13,13 @@
  */
 package org.openmrs.module.validation;
 
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.Activator;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.validation.api.ValidationService;
+
+import java.util.List;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -30,17 +29,17 @@ public class ValidationActivator extends BaseModuleActivator {
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	/**
-	 * @see org.openmrs.module.Activator#startup()
+	 * @see BaseModuleActivator#started()
 	 */
-	public void startup() {
-		log.info("Starting Validation Module");
+	public void started() {
+		log.info("Validation Module started");
 	}
 	
 	/**
-	 * @see org.openmrs.module.Activator#shutdown()
+	 * @see BaseModuleActivator#stopped()
 	 */
-	public void shutdown() {
-		log.info("Shutting down Validation Module");
+	public void stopped() {
+		log.info("Validation Module stopped");
 		List<ValidationThread> validationThreads = Context.getService(ValidationService.class).getValidationThreads();
 		for (ValidationThread validationThread : validationThreads) {
 			validationThread.interrupt();
