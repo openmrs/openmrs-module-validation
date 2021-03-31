@@ -14,6 +14,7 @@
 package org.openmrs.module.validation.api;
 
 import org.openmrs.annotation.Authorized;
+import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.validation.ValidationThread;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ import java.util.Map;
  * 
  * @see ValidationThread
  */
-public interface ValidationService {
+public interface ValidationService extends OpenmrsService {
 	
 	@Authorized("Validate Objects")
 	@Transactional(readOnly = true)

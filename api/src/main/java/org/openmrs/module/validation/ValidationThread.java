@@ -102,8 +102,8 @@ public class ValidationThread extends Thread {
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
+		System.out.println("Validation thread started for " + type + " (" + startFrom + "-" + (startFrom + objectsLeftToProcess) + ")");
 		Context.setUserContext(userContext);
-		
 		long currentPosition = startFrom;
         try{
             while (objectsLeftToProcess > 0 && !isInterrupted()) {
@@ -116,13 +116,12 @@ public class ValidationThread extends Thread {
                 } else {
                     objectsLeftToProcess = 0;
                 }
+                System.out.println(type + " (" + startFrom + "): " + currentPosition + "/" + totalObjects);
             }
         } finally {
+			System.out.println("Validation thread completed for " + type + " (" + startFrom + "-" + (startFrom + objectsLeftToProcess) + ").  Num errors: " + errors.size());
             deactivateThread(true);
-//            System.out.println("Thread is dead: " + this.isActive());
         }
-
-
 	}
 	
 }

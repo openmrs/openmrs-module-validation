@@ -11,51 +11,54 @@
 
 	<url>https://wiki.openmrs.org/x/CwDeAQ</url>
 
-	<scm>
-		<connection>scm:git:https://github.com/openmrs/openmrs-module-validation/</connection>
-		<developerConnection>scm:git:https://github.com/openmrs/openmrs-module-validation/</developerConnection>
-		<url>scm:git:https://github.com/openmrs/openmrs-module-validation/</url>
-		<tag>HEAD</tag>
-	</scm>
-
-	<distributionManagement>
-		<repository>
-			<id>openmrs-repo-modules</id>
-			<name>OpenMRS Modules</name>
-			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/modules</url>
-		</repository>
-		<snapshotRepository>
-			<id>openmrs-repo-snapshots</id>
-			<name>OpenMRS Snapshots</name>
-			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
+	<properties>
+		<openMRSVersion>2.3.3</openMRSVersion>
+		<openMRSMinorVersion>2.3</openMRSMinorVersion>
+		<legacyuiVersion>1.7.0</legacyuiVersion>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
 	<modules>
 		<module>api</module>
 		<module>omod</module>
 	</modules>
 
-	<properties>
-		<openMRSVersion>1.9.9</openMRSVersion>
-	</properties>
+	<scm>
+		<connection>scm:git:git@github.com:openmrs/openmrs-module-validation/</connection>
+		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-validation/</developerConnection>
+		<url>https://github.com/openmrs/openmrs-module-validation/</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>openmrs-repo-modules</id>
+            <name>Modules</name>
+            <url>https://openmrs.jfrog.io/artifactory/modules/</url>
+		</repository>
+		<snapshotRepository>
+			<id>openmrs-repo-snapshots</id>
+			<name>OpenMRS Snapshots</name>
+            <url>https://openmrs.jfrog.io/artifactory/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- Libraries from lib to add as dependencies with compile or runtime 
-				scope: Find matching dependencies in maven central repository. <dependency> 
-				<groupId>org.other.library</groupId> <artifactId>library-name</artifactId> 
-				<version>library.version</version> <scope>compile</scope> </dependency> -->
-
 
 			<dependency>
 				<groupId>org.openmrs.api</groupId>
 				<artifactId>openmrs-api</artifactId>
 				<version>${openMRSVersion}</version>
-				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
-
+			<dependency>
+				<groupId>org.openmrs.api</groupId>
+				<artifactId>openmrs-api</artifactId>
+				<version>${openMRSVersion}</version>
+				<classifier>tests</classifier>
+				<scope>test</scope>
+			</dependency>
 			<dependency>
 				<groupId>org.openmrs.web</groupId>
 				<artifactId>openmrs-web</artifactId>
@@ -88,10 +91,21 @@
 				<scope>test</scope>
 			</dependency>
 
+			<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>legacyui-api</artifactId>
+				<version>${legacyuiVersion}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>legacyui-omod</artifactId>
+				<version>${legacyuiVersion}</version>
+				<scope>provided</scope>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>
-	
 
 	<build>
 		<pluginManagement>
@@ -100,8 +114,9 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
-						<target>1.6</target>
-						<source>1.6</source>
+                        <target>1.8</target>
+                        <source>1.8</source>
+                        <encoding>UTF-8</encoding>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -111,12 +126,45 @@
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
 					<version>2.5</version>
 					<configuration>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 						<tagNameFormat>@{project.version}</tagNameFormat>
 					</configuration>
+                </plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<executions>
+						<execution>
+							<goals>
+								<goal>test-jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.13</version>
+					<configuration>
+						<includes>
+							<include>**/*Test.java</include>
+						</includes>
+						<runOrder>alphabetical</runOrder> <!-- TODO: hack because we want the ViewRecordController Test to run last since it dirties context (?); figure out the right way and remove this  -->
+						<argLine>-Duser.language=en -Duser.region=US -Xmx512m -XX:MaxPermSize=512m</argLine>
+					</configuration>
+				</plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.9.1</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -126,7 +174,7 @@
 		<repository>
 			<id>openmrs-repo</id>
 			<name>OpenMRS Nexus Repository</name>
-			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
 		</repository>
 	</repositories>
 
@@ -134,10 +182,12 @@
 		<pluginRepository>
 			<id>openmrs-repo</id>
 			<name>OpenMRS Nexus Repository</name>
-			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>openmrs-repo-snapshots</id>
+            <name>OpenMRS Snapshots</name>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/snapshots</url>
 		</pluginRepository>
 	</pluginRepositories>
 

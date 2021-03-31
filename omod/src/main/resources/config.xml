@@ -33,9 +33,8 @@
 	<!-- Add's link to admin page --> 
 	<extension>
 		<point>org.openmrs.admin.list</point>
-		<class>org.openmrs.module.validation.extension.html.AdminList</class>
-	</extension> 
-
+		<class>org.openmrs.module.validation.web.extension.AdminList</class>
+	</extension>
 	
 	<!-- Internationalization -->
 	<!-- All message codes should start with @MODULE_ID@.* -->

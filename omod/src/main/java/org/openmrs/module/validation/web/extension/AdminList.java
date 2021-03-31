@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.validation.extension.html;
+package org.openmrs.module.validation.web.extension;
 
 import java.util.HashMap;
 import java.util.Map;

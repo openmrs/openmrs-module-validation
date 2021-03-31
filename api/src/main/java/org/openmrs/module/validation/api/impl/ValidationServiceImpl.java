@@ -19,6 +19,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
+import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.validation.ValidationThread;
 import org.openmrs.module.validation.api.ValidationService;
 import org.openmrs.validator.ValidateUtil;
@@ -31,18 +33,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  *
  */
-public class ValidationServiceImpl implements ValidationService {
+public class ValidationServiceImpl extends BaseOpenmrsService implements ValidationService {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	private SessionFactory sessionFactory;
+	private DbSessionFactory sessionFactory;
 	
 	private List<ValidationThread> validationThreads = new CopyOnWriteArrayList<ValidationThread>();
 	
 	/**
 	 * @param sessionFactory the sessionFactory to set
 	 */
-	public void setSessionFactory(SessionFactory sessionFactory) {
+	public void setSessionFactory(DbSessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 
@@ -112,7 +114,7 @@ public class ValidationServiceImpl implements ValidationService {
 		@SuppressWarnings("unchecked")
 		List<Object> list = sessionFactory.getCurrentSession().createCriteria(type).addOrder(Order.asc("uuid"))
 		        .setFirstResult((int) firstObject).setMaxResults((int) maxObjects).list();
-		
+
 		for (Object object : list) {
 			try {
 				log.info("Validating " + object);

@@ -23,15 +23,14 @@
 		<property name="moduleService">
 			<list>
 				<value>org.openmrs.module.validation.api.ValidationService</value>
-				<bean
-					class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="transactionManager">
 						<ref bean="transactionManager" />
 					</property>
 					<property name="target">
 						<bean class="org.openmrs.module.validation.api.impl.ValidationServiceImpl">
 							<property name="sessionFactory">
-								<ref bean="sessionFactory" />
+								<ref bean="dbSessionFactory" />
 							</property>
 						</bean>
 					</property>
