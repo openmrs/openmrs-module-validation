@@ -24,8 +24,8 @@
 	</modules>
 
 	<scm>
-		<connection>scm:git:git@github.com:openmrs/openmrs-module-validation/</connection>
-		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-validation/</developerConnection>
+		<connection>scm:git:git@github.com:openmrs/openmrs-module-validation.git</connection>
+		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-validation.git</developerConnection>
 		<url>https://github.com/openmrs/openmrs-module-validation/</url>
 		<tag>HEAD</tag>
 	</scm>
