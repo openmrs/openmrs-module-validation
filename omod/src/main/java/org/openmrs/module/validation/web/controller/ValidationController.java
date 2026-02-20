@@ -50,12 +50,12 @@ public class ValidationController {
 		return Context.getService(ValidationService.class);
 	}
 	
-	@RequestMapping(value = "/module/validation/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/module/validation/list.form", method = RequestMethod.GET)
 	public void showList(ModelMap model) throws Exception {
         model.addAttribute("classNamesMap", ValidationUtils.getClassNamesToValidate());
 	}
 	
-	@RequestMapping(value = "/module/validation/validate", params = "validate_button" , method = RequestMethod.POST)
+	@RequestMapping(value = "/module/validation/validate.form", params = "validate_button" , method = RequestMethod.POST)
     public String validate(@RequestParam("types") String types, HttpServletRequest request, ModelMap model) {
         HttpSession httpSession = request.getSession();
         String[] obtypes = ValidationUtils.getListOfObjectsToValidate(types);
@@ -76,7 +76,7 @@ public class ValidationController {
         return "redirect:list.form";
 	}
 
-    @RequestMapping(value = "/module/validation/validate", params = "stop_button", method = RequestMethod.POST)
+    @RequestMapping(value = "/module/validation/validate.form", params = "stop_button", method = RequestMethod.POST)
     public String stopValidation(HttpServletRequest request) throws Exception {
         try{
             HttpSession httpSession = request.getSession();
@@ -91,7 +91,7 @@ public class ValidationController {
 
     }
 
-    @RequestMapping(value = "/module/validation/validate", params = "show_button", method = RequestMethod.POST)
+    @RequestMapping(value = "/module/validation/validate.form", params = "show_button", method = RequestMethod.POST)
     public void showReport(ModelMap model) throws Exception {
         MultiMap errorWithClassMap = new MultiValueMap();
         MultiMap errorWithTypeMap = new MultiValueMap();
